@@ -2,6 +2,32 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.3.1] - 2025-10-17
+
+### Changed
+
+- Unified GitHub Actions workflow: single workflow now handles build, npm publish, and docs deployment
+- Simplified CI: removed multiple OS/Node version matrix, now uses single ubuntu-latest with Node 20
+- Removed code formatting checks from CI and pre-commit hooks (still available manually)
+- Removed test execution from CI (tests run in pre-commit hooks locally)
+- Fixed TypeScript configuration: set `module: "Node16"` to match `moduleResolution: "node16"`
+- Implemented proper event-based conversion API with EventEmitter pattern
+- Fixed type errors in test files and examples
+- Created separate `tsconfig.test.json` for test files
+
+### Added
+
+- Per-conversion event tracking with `start`, `progress`, `end`, `error` events
+- `ConversionResult` and `ConversionResultBuffer` interfaces for better type safety
+- Unified `main.yml` workflow replacing `ci.yml`, `docs.yml`, `publish.yml`, and `release.yml`
+- Automatic version detection in workflow (only publishes if version changed)
+
+### Fixed
+
+- Import errors in test files (`OutputFormat` from `formats.ts`)
+- `VolumeFilter` and `TempoFilter` property names in tests
+- Event emitter implementation in `convert()` and `convertToBuffer()` methods
+
 ## [0.2.0] - 2025-10-17
 
 ### Features
