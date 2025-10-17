@@ -61,8 +61,8 @@ await ffmpeg.convert({
   input: 'long-video.mp4',
   output: 'clip.mp4',
   timing: {
-    seek: 10,      // Start at 10 seconds
-    duration: 30,  // 30 seconds long
+    seek: 10, // Start at 10 seconds
+    duration: 30, // 30 seconds long
   },
   video: {
     codec: VideoCodec.COPY, // Fast, no re-encode
@@ -200,4 +200,3 @@ await ffmpeg.convertBatchParallel(
 - [Filters Guide](/FILTERS) - Explore all available filters
 - [Hardware Acceleration](/HARDWARE) - Speed up encoding
 - [Thumbnails & Trailers](/THUMBNAILS_TRAILERS) - Media extraction
-

@@ -9,4 +9,3 @@ export {
   InvalidOutputError,
   HardwareAccelerationError,
 } from './ffmpeg-errors';
-

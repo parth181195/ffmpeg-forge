@@ -15,4 +15,3 @@ export * from './thumbnail';
 export * from './screenshot';
 export * from './concat';
 export * from './multi-input';
-

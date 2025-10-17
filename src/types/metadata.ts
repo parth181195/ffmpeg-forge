@@ -4,7 +4,7 @@ export interface StreamMetadata {
   codecLongName: string;
   codecType: 'video' | 'audio' | 'subtitle' | 'data' | 'attachment';
   codecTag: string;
-  
+
   // Video specific
   width?: number;
   height?: number;
@@ -15,13 +15,13 @@ export interface StreamMetadata {
   frameRate?: string;
   avgFrameRate?: string;
   bitRate?: string;
-  
+
   // Audio specific
   sampleRate?: string;
   channels?: number;
   channelLayout?: string;
   bitsPerSample?: number;
-  
+
   // Common
   duration?: string;
   durationTs?: number;
@@ -71,4 +71,3 @@ export interface ImageMetadata {
   codec: string;
   size: number; // in bytes
 }
-

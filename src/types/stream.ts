@@ -5,4 +5,3 @@ export enum StreamType {
 }
 
 export type StreamTypeValue = StreamType | 'video' | 'audio' | 'subtitle';
-

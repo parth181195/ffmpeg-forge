@@ -5,7 +5,7 @@ import { VideoCodec } from '../src/types/codecs';
 describe('Filters', () => {
   it('should handle scale filter', () => {
     const ffmpeg = new FFmpeg();
-    
+
     const cmd = ffmpeg.buildCommand({
       input: 'input.mp4',
       output: 'output.mp4',
@@ -20,15 +20,15 @@ describe('Filters', () => {
         },
       },
     });
-    
+
     expect(cmd).toContain('scale');
     expect(cmd).toContain('1920');
     expect(cmd).toContain('1080');
   });
-  
+
   it('should handle crop filter', () => {
     const ffmpeg = new FFmpeg();
-    
+
     const cmd = ffmpeg.buildCommand({
       input: 'input.mp4',
       output: 'output.mp4',
@@ -44,13 +44,13 @@ describe('Filters', () => {
         },
       },
     });
-    
+
     expect(cmd).toContain('crop');
   });
-  
+
   it('should handle pad filter', () => {
     const ffmpeg = new FFmpeg();
-    
+
     const cmd = ffmpeg.buildCommand({
       input: 'input.mp4',
       output: 'output.mp4',
@@ -67,13 +67,13 @@ describe('Filters', () => {
         },
       },
     });
-    
+
     expect(cmd).toContain('pad');
   });
-  
+
   it('should handle deinterlace filter', () => {
     const ffmpeg = new FFmpeg();
-    
+
     const cmd = ffmpeg.buildCommand({
       input: 'input.mp4',
       output: 'output.mp4',
@@ -86,13 +86,13 @@ describe('Filters', () => {
         },
       },
     });
-    
+
     expect(cmd).toContain('yadif');
   });
-  
+
   it('should handle denoise filter', () => {
     const ffmpeg = new FFmpeg();
-    
+
     const cmd = ffmpeg.buildCommand({
       input: 'input.mp4',
       output: 'output.mp4',
@@ -106,13 +106,13 @@ describe('Filters', () => {
         },
       },
     });
-    
+
     expect(cmd).toContain('hqdn3d');
   });
-  
+
   it('should handle sharpen filter', () => {
     const ffmpeg = new FFmpeg();
-    
+
     const cmd = ffmpeg.buildCommand({
       input: 'input.mp4',
       output: 'output.mp4',
@@ -125,13 +125,13 @@ describe('Filters', () => {
         },
       },
     });
-    
+
     expect(cmd).toContain('unsharp');
   });
-  
+
   it('should handle color correction', () => {
     const ffmpeg = new FFmpeg();
-    
+
     const cmd = ffmpeg.buildCommand({
       input: 'input.mp4',
       output: 'output.mp4',
@@ -146,13 +146,13 @@ describe('Filters', () => {
         },
       },
     });
-    
+
     expect(cmd).toContain('eq');
   });
-  
+
   it('should handle rotate filter', () => {
     const ffmpeg = new FFmpeg();
-    
+
     const cmd = ffmpeg.buildCommand({
       input: 'input.mp4',
       output: 'output.mp4',
@@ -160,18 +160,18 @@ describe('Filters', () => {
         codec: VideoCodec.H264,
         filters: {
           rotate: {
-            angle: 45,  // Arbitrary angle
+            angle: 45, // Arbitrary angle
           },
         },
       },
     });
-    
+
     expect(cmd).toContain('rotate');
   });
-  
+
   it('should handle flip filter', () => {
     const ffmpeg = new FFmpeg();
-    
+
     const cmd = ffmpeg.buildCommand({
       input: 'input.mp4',
       output: 'output.mp4',
@@ -184,13 +184,13 @@ describe('Filters', () => {
         },
       },
     });
-    
+
     expect(cmd).toContain('hflip');
   });
-  
+
   it('should handle text overlay', () => {
     const ffmpeg = new FFmpeg();
-    
+
     const cmd = ffmpeg.buildCommand({
       input: 'input.mp4',
       output: 'output.mp4',
@@ -205,13 +205,13 @@ describe('Filters', () => {
         },
       },
     });
-    
+
     expect(cmd).toContain('drawtext');
   });
-  
+
   it('should handle fade filter', () => {
     const ffmpeg = new FFmpeg();
-    
+
     const cmd = ffmpeg.buildCommand({
       input: 'input.mp4',
       output: 'output.mp4',
@@ -226,13 +226,13 @@ describe('Filters', () => {
         },
       },
     });
-    
+
     expect(cmd).toContain('fade');
   });
-  
+
   it('should handle audio volume filter', () => {
     const ffmpeg = new FFmpeg();
-    
+
     const cmd = ffmpeg.buildCommand({
       input: 'input.mp4',
       output: 'output.mp4',
@@ -240,18 +240,18 @@ describe('Filters', () => {
         codec: 'aac',
         filters: {
           volume: {
-            level: 150,
+            volume: 1.5,
           },
         },
       },
     });
-    
+
     expect(cmd).toContain('volume');
   });
-  
+
   it('should handle audio tempo filter', () => {
     const ffmpeg = new FFmpeg();
-    
+
     const cmd = ffmpeg.buildCommand({
       input: 'input.mp4',
       output: 'output.mp4',
@@ -259,18 +259,18 @@ describe('Filters', () => {
         codec: 'aac',
         filters: {
           tempo: {
-            speed: 1.5,
+            tempo: 1.5,
           },
         },
       },
     });
-    
+
     expect(cmd).toContain('atempo');
   });
-  
+
   it('should handle multiple filters', () => {
     const ffmpeg = new FFmpeg();
-    
+
     const cmd = ffmpeg.buildCommand({
       input: 'input.mp4',
       output: 'output.mp4',
@@ -290,15 +290,15 @@ describe('Filters', () => {
         },
       },
     });
-    
+
     expect(cmd).toContain('scale');
     expect(cmd).toContain('unsharp');
     expect(cmd).toContain('eq');
   });
-  
+
   it('should handle custom filters', () => {
     const ffmpeg = new FFmpeg();
-    
+
     const cmd = ffmpeg.buildCommand({
       input: 'input.mp4',
       output: 'output.mp4',
@@ -309,9 +309,8 @@ describe('Filters', () => {
         },
       },
     });
-    
+
     expect(cmd).toContain('hqdn3d');
     expect(cmd).toContain('format');
   });
 });
-

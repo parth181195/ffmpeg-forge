@@ -1,5 +1,9 @@
 import { describe, it, expect } from 'vitest';
-import { parseMediaMetadata, parseVideoMetadata, parseImageMetadata } from '../src/parsers/metadata-parser';
+import {
+  parseMediaMetadata,
+  parseVideoMetadata,
+  parseImageMetadata,
+} from '../src/parsers/metadata-parser';
 
 describe('Metadata Parsing', () => {
   describe('parseMediaMetadata', () => {
@@ -14,8 +18,8 @@ describe('Metadata Parsing', () => {
           bit_rate: '800000',
           probe_score: 100,
           tags: {
-            encoder: 'test encoder'
-          }
+            encoder: 'test encoder',
+          },
         },
         streams: [
           {
@@ -31,7 +35,7 @@ describe('Metadata Parsing', () => {
             avg_frame_rate: '30/1',
             duration: '10.5',
             bit_rate: '700000',
-            tags: {}
+            tags: {},
           },
           {
             index: 1,
@@ -43,9 +47,9 @@ describe('Metadata Parsing', () => {
             channels: 2,
             channel_layout: 'stereo',
             duration: '10.5',
-            tags: {}
-          }
-        ]
+            tags: {},
+          },
+        ],
       });
 
       const result = parseMediaMetadata(mockJson);
@@ -70,7 +74,7 @@ describe('Metadata Parsing', () => {
           duration: '10.5',
           size: '1048576',
           bitRate: '800000',
-          tags: {}
+          tags: {},
         },
         streams: [
           {
@@ -82,7 +86,7 @@ describe('Metadata Parsing', () => {
             width: 1920,
             height: 1080,
             avgFrameRate: '30/1',
-            tags: {}
+            tags: {},
           },
           {
             index: 1,
@@ -91,9 +95,9 @@ describe('Metadata Parsing', () => {
             codecType: 'audio' as const,
             codecTag: 'mp4a',
             channels: 2,
-            tags: {}
-          }
-        ]
+            tags: {},
+          },
+        ],
       };
 
       const result = parseVideoMetadata(mediaMetadata);
@@ -115,7 +119,7 @@ describe('Metadata Parsing', () => {
           filename: 'test.mp3',
           formatName: 'mp3',
           formatLongName: 'MP3',
-          tags: {}
+          tags: {},
         },
         streams: [
           {
@@ -124,9 +128,9 @@ describe('Metadata Parsing', () => {
             codecLongName: 'MP3',
             codecType: 'audio' as const,
             codecTag: 'mp3',
-            tags: {}
-          }
-        ]
+            tags: {},
+          },
+        ],
       };
 
       expect(() => parseVideoMetadata(mediaMetadata)).toThrow('No video stream found');
@@ -141,7 +145,7 @@ describe('Metadata Parsing', () => {
           formatName: 'png_pipe',
           formatLongName: 'piped png sequence',
           size: '102400',
-          tags: {}
+          tags: {},
         },
         streams: [
           {
@@ -153,9 +157,9 @@ describe('Metadata Parsing', () => {
             width: 1920,
             height: 1080,
             pixelFormat: 'rgba',
-            tags: {}
-          }
-        ]
+            tags: {},
+          },
+        ],
       };
 
       const result = parseImageMetadata(mediaMetadata);
@@ -173,7 +177,7 @@ describe('Metadata Parsing', () => {
           filename: 'test.mp3',
           formatName: 'mp3',
           formatLongName: 'MP3',
-          tags: {}
+          tags: {},
         },
         streams: [
           {
@@ -182,13 +186,12 @@ describe('Metadata Parsing', () => {
             codecLongName: 'MP3',
             codecType: 'audio' as const,
             codecTag: 'mp3',
-            tags: {}
-          }
-        ]
+            tags: {},
+          },
+        ],
       };
 
       expect(() => parseImageMetadata(mediaMetadata)).toThrow('No image stream found');
     });
   });
 });
-

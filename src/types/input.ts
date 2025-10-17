@@ -7,4 +7,3 @@ export interface InputInfo {
   source: InputSource;
   tempPath?: string;
 }
-

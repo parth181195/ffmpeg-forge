@@ -36,6 +36,7 @@ BREAKING CHANGE: The old API has been removed
 ## Examples
 
 ### Feature
+
 ```
 feat: add event-based conversion API
 
@@ -44,6 +45,7 @@ This provides fluent-ffmpeg style per-conversion event handling.
 ```
 
 ### Bug Fix
+
 ```
 fix: resolve VitePress dead links
 
@@ -51,6 +53,7 @@ Update internal links in VitePress markdown files to correctly point to existing
 ```
 
 ### Breaking Change
+
 ```
 feat!: replace callback API with event-based API
 
@@ -59,6 +62,7 @@ Use convertWithCallbacks() for the old callback-based API.
 ```
 
 ### Documentation
+
 ```
 docs: add event-based conversion example
 
@@ -66,6 +70,7 @@ Add comprehensive example showing per-conversion event handling similar to fluen
 ```
 
 ### Chore
+
 ```
 chore: update dependencies
 

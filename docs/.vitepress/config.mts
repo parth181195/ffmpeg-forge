@@ -4,7 +4,7 @@ export default defineConfig({
   title: 'ffmpeg-forge',
   description: 'A modern, type-safe FFmpeg wrapper for Node.js',
   base: '/ffmpeg-forge/',
-  
+
   themeConfig: {
     nav: [
       { text: 'Guide', link: '/guide/getting-started' },
@@ -12,13 +12,16 @@ export default defineConfig({
       {
         text: 'v0.1.0',
         items: [
-          { text: 'Changelog', link: 'https://github.com/parth181195/ffmpeg-forge/blob/main/CHANGELOG.md' },
+          {
+            text: 'Changelog',
+            link: 'https://github.com/parth181195/ffmpeg-forge/blob/main/CHANGELOG.md',
+          },
           { text: 'GitHub', link: 'https://github.com/parth181195/ffmpeg-forge' },
           { text: 'npm', link: 'https://www.npmjs.com/package/ffmpeg-forge' },
         ],
       },
     ],
-    
+
     sidebar: {
       '/guide/': [
         {
@@ -39,24 +42,21 @@ export default defineConfig({
         },
       ],
     },
-    
-    socialLinks: [
-      { icon: 'github', link: 'https://github.com/parth181195/ffmpeg-forge' },
-    ],
-    
+
+    socialLinks: [{ icon: 'github', link: 'https://github.com/parth181195/ffmpeg-forge' }],
+
     editLink: {
       pattern: 'https://github.com/parth181195/ffmpeg-forge/edit/main/docs/:path',
       text: 'Edit this page on GitHub',
     },
-    
+
     search: {
       provider: 'local',
     },
-    
+
     footer: {
       message: 'Released under the MIT License.',
       copyright: 'Copyright © 2025 Parth Jansari',
     },
   },
 });
-

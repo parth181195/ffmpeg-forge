@@ -14,7 +14,7 @@ export default defineConfig({
       entry: resolve(__dirname, 'src/index.ts'),
       name: 'NodeFFmpegTS',
       formats: ['es', 'cjs'],
-      fileName: (format) => {
+      fileName: format => {
         if (format === 'es') return 'index.js';
         if (format === 'cjs') return 'index.cjs';
         return `index.${format}.js`;

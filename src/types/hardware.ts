@@ -26,4 +26,3 @@ export const GPU_CODEC_PATTERNS = {
   videotoolbox: ['_videotoolbox'],
   v4l2: ['_v4l2m2m'],
 } as const;
-

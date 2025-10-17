@@ -6,4 +6,3 @@ export interface ConversionProgress {
   timemark: string;
   percent?: number;
 }
-

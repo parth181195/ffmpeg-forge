@@ -1,0 +1,9 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "skipLibCheck": true,
+    "moduleResolution": "node16"
+  },
+  "include": ["src", "tests"],
+  "exclude": ["node_modules", "dist", "example"]
+}

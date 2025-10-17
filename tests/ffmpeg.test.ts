@@ -33,7 +33,7 @@ describe('FFmpeg', () => {
     it('should create instance with custom paths', () => {
       const instance = new FFmpeg({
         ffmpegPath: '/custom/ffmpeg',
-        ffprobePath: '/custom/ffprobe'
+        ffprobePath: '/custom/ffprobe',
       });
       expect(instance).toBeInstanceOf(FFmpeg);
     });
@@ -42,7 +42,7 @@ describe('FFmpeg', () => {
   describe('Version Information', () => {
     it('should get FFmpeg version information', async () => {
       const version = await FFmpeg.getVersion();
-      
+
       expect(version).toHaveProperty('version');
       expect(version).toHaveProperty('copyright');
       expect(version).toHaveProperty('configuration');
@@ -53,7 +53,7 @@ describe('FFmpeg', () => {
 
     it('should have library versions', async () => {
       const version = await FFmpeg.getVersion();
-      
+
       expect(Object.keys(version.libVersions).length).toBeGreaterThan(0);
       expect(version.libVersions).toHaveProperty('libavcodec');
       expect(version.libVersions).toHaveProperty('libavformat');
@@ -63,7 +63,7 @@ describe('FFmpeg', () => {
   describe('Format Detection', () => {
     it('should get available formats', async () => {
       const formats = await FFmpeg.getFormats();
-      
+
       expect(formats).toHaveProperty('muxing');
       expect(formats).toHaveProperty('demuxing');
       expect(Array.isArray(formats.muxing)).toBe(true);
@@ -74,7 +74,7 @@ describe('FFmpeg', () => {
 
     it('should support common formats', async () => {
       const formats = await FFmpeg.getFormats();
-      
+
       expect(formats.muxing).toContain('mp4');
       expect(formats.muxing).toContain('webm');
       // mp4 demuxing might be listed as part of a combined format
@@ -84,7 +84,7 @@ describe('FFmpeg', () => {
     it('should verify format support', async () => {
       const canMp4 = await FFmpeg.canOutputFormat('mp4');
       expect(canMp4).toBe(true);
-      
+
       const canInvalid = await FFmpeg.canOutputFormat('invalid_format_xyz');
       expect(canInvalid).toBe(false);
     });
@@ -93,26 +93,26 @@ describe('FFmpeg', () => {
   describe('Codec Detection', () => {
     it('should get available codecs', async () => {
       const codecs = await FFmpeg.getCodecs();
-      
+
       expect(codecs).toHaveProperty('video');
       expect(codecs).toHaveProperty('audio');
       expect(codecs).toHaveProperty('subtitle');
-      
+
       expect(codecs.video).toHaveProperty('encoders');
       expect(codecs.video).toHaveProperty('decoders');
       expect(codecs.audio).toHaveProperty('encoders');
       expect(codecs.audio).toHaveProperty('decoders');
-      
+
       expect(Array.isArray(codecs.video.encoders)).toBe(true);
       expect(codecs.video.encoders.length).toBeGreaterThan(0);
     });
 
     it('should support common codecs', async () => {
       const codecs = await FFmpeg.getCodecs();
-      
+
       // Check for H.264 encoder (libx264)
       expect(codecs.video.encoders).toContain('libx264');
-      
+
       // Check for AAC audio encoder
       expect(codecs.audio.encoders).toContain('aac');
     });
@@ -120,7 +120,7 @@ describe('FFmpeg', () => {
     it('should verify codec support', async () => {
       const canH264 = await FFmpeg.canEncodeWithCodec('libx264', 'video');
       expect(canH264).toBe(true);
-      
+
       const canInvalid = await FFmpeg.canEncodeWithCodec('invalid_codec', 'video');
       expect(canInvalid).toBe(false);
     });
@@ -129,11 +129,11 @@ describe('FFmpeg', () => {
   describe('Capabilities', () => {
     it('should get all capabilities at once', async () => {
       const capabilities = await FFmpeg.getCapabilities();
-      
+
       expect(capabilities).toHaveProperty('version');
       expect(capabilities).toHaveProperty('formats');
       expect(capabilities).toHaveProperty('codecs');
-      
+
       expect(capabilities.version).toHaveProperty('version');
       expect(capabilities.formats).toHaveProperty('muxing');
       expect(capabilities.codecs).toHaveProperty('video');
@@ -143,10 +143,10 @@ describe('FFmpeg', () => {
   describe('Hardware Acceleration', () => {
     it('should detect available hardware acceleration', async () => {
       const hwAccel = await FFmpeg.getAvailableHardwareAcceleration();
-      
+
       expect(Array.isArray(hwAccel)).toBe(true);
       expect(hwAccel.length).toBeGreaterThan(0);
-      
+
       // CPU should always be available
       const cpu = hwAccel.find(hw => hw.type === 'cpu');
       expect(cpu).toBeDefined();
@@ -156,10 +156,10 @@ describe('FFmpeg', () => {
 
     it('should filter encoders by acceleration type', async () => {
       const cpuEncoders = await FFmpeg.getEncodersByAcceleration('cpu', 'video');
-      
+
       expect(Array.isArray(cpuEncoders)).toBe(true);
       expect(cpuEncoders.length).toBeGreaterThan(0);
-      
+
       // CPU encoders should not have GPU-specific patterns
       cpuEncoders.forEach(encoder => {
         expect(encoder).not.toMatch(/_nvenc|_qsv|_amf|_vaapi/);
@@ -173,9 +173,9 @@ describe('FFmpeg', () => {
         format: OutputFormat.MP4,
         videoCodec: VideoCodec.H264,
         audioCodec: AudioCodec.AAC,
-        acceleration: 'cpu'
+        acceleration: 'cpu',
       });
-      
+
       expect(result.supported).toBe(true);
       expect(result.unsupported).toHaveLength(0);
       expect(result.details.format?.supported).toBe(true);
@@ -186,9 +186,9 @@ describe('FFmpeg', () => {
     it('should detect invalid output configuration', async () => {
       const result = await FFmpeg.verifyOutputSupport({
         format: 'invalid_format',
-        videoCodec: 'invalid_codec'
+        videoCodec: 'invalid_codec',
       });
-      
+
       expect(result.supported).toBe(false);
       expect(result.unsupported.length).toBeGreaterThan(0);
     });
@@ -197,9 +197,9 @@ describe('FFmpeg', () => {
       const result = await FFmpeg.verifyOutputSupport({
         format: 'webm',
         videoCodec: 'libvpx-vp9',
-        audioCodec: 'libopus'
+        audioCodec: 'libopus',
       });
-      
+
       expect(result.supported).toBe(true);
     });
   });
@@ -225,4 +225,3 @@ describe('FFmpeg', () => {
     });
   });
 });
-

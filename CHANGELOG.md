@@ -5,12 +5,13 @@ All notable changes to this project will be documented in this file.
 ## [0.2.0] - 2025-10-17
 
 ### Features
-- Manual version bump
 
+- Manual version bump
 
 ## [0.1.0] - 2025-10-18
 
 ### Added
+
 - Initial release
 - Modern TypeScript alternative to fluent-ffmpeg (which is deprecated)
 - 80 features for video/audio processing
@@ -34,6 +35,7 @@ All notable changes to this project will be documented in this file.
 ### Features by Category
 
 #### Core Conversion
+
 - Video/audio conversion with full control
 - Multiple input formats support
 - Flexible I/O (files, Buffers, ReadStreams)
@@ -42,6 +44,7 @@ All notable changes to this project will be documented in this file.
 - Cancellation support
 
 #### Hardware Acceleration
+
 - NVIDIA NVENC
 - Intel Quick Sync
 - AMD AMF
@@ -51,6 +54,7 @@ All notable changes to this project will be documented in this file.
 - Auto-detection and selection
 
 #### Video Processing
+
 - Scale with 10 algorithms
 - Crop, pad, rotate, flip
 - Deinterlace (3 modes)
@@ -60,6 +64,7 @@ All notable changes to this project will be documented in this file.
 - Fade effects
 
 #### Audio Processing
+
 - Volume control
 - Denoise
 - Equalizer
@@ -67,12 +72,14 @@ All notable changes to this project will be documented in this file.
 - Pitch shift
 
 #### Media Extraction
+
 - Screenshots (single & multiple)
 - Thumbnails (5 strategies)
 - Trailer generation (4 strategies)
 - Frame extraction
 
 #### Advanced Features
+
 - Video concatenation
 - Audio merging
 - Picture-in-picture
@@ -81,6 +88,7 @@ All notable changes to this project will be documented in this file.
 - Smart recommendations
 
 ### Technical
+
 - TypeScript native (100%)
 - Zero runtime dependencies
 - Bundle size: 25.5 KB gzipped
@@ -89,6 +97,7 @@ All notable changes to this project will be documented in this file.
 - 2,327 lines of documentation
 
 ### Tested On
+
 - FFmpeg 7.1.1 (Ubuntu)
 - Node.js 18+
 - Hardware: AMD Ryzen 5 5600X, NVIDIA RTX 4070

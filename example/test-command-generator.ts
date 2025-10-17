@@ -124,7 +124,7 @@ const trimConfig: ConversionConfig = {
     fastSeek: true,
   },
   video: {
-    codec: VideoCodec.COPY,  // No re-encoding
+    codec: VideoCodec.COPY, // No re-encoding
   },
   audio: {
     codec: AudioCodec.COPY,
@@ -204,7 +204,8 @@ const invalidConfig: ConversionConfig = {
       targetWidth: 3840,
       targetHeight: 2160,
     },
-    downscale: {  // Invalid: both upscale and downscale
+    downscale: {
+      // Invalid: both upscale and downscale
       algorithm: ScalingAlgorithm.LANCZOS,
       targetWidth: 1920,
       targetHeight: 1080,
@@ -229,4 +230,3 @@ presets.forEach(preset => {
 });
 
 console.log('\n✅ Command generator tests complete!');
-

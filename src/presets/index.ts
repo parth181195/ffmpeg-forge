@@ -65,7 +65,7 @@ export const Presets = {
         bitrate: '128k',
       },
       timing: {
-        duration: 60,  // Max 60 seconds
+        duration: 60, // Max 60 seconds
       },
     } as Partial<ConversionConfig>,
   },
@@ -96,7 +96,7 @@ export const Presets = {
         bitrate: '128k',
       },
       timing: {
-        duration: 15,  // Max 15 seconds
+        duration: 15, // Max 15 seconds
       },
     } as Partial<ConversionConfig>,
   },
@@ -146,7 +146,7 @@ export const Presets = {
         bitrate: '128k',
       },
       timing: {
-        duration: 140,  // Max 2:20
+        duration: 140, // Max 2:20
       },
     } as Partial<ConversionConfig>,
   },
@@ -165,7 +165,7 @@ export const Presets = {
         preset: 'veryfast',
         profile: 'main',
         level: '4.0',
-        keyframeInterval: 48,  // 2 seconds at 24fps
+        keyframeInterval: 48, // 2 seconds at 24fps
       },
       audio: {
         codec: AudioCodec.AAC,
@@ -185,7 +185,7 @@ export const Presets = {
       format: OutputFormat.MKV,
       video: {
         codec: VideoCodec.H265,
-        quality: 18,  // CRF 18 (high quality)
+        quality: 18, // CRF 18 (high quality)
         preset: 'slow',
         profile: 'main10',
       },
@@ -205,7 +205,7 @@ export const Presets = {
       format: OutputFormat.WEBM,
       video: {
         codec: VideoCodec.VP9,
-        quality: 35,  // Lower quality for smaller size
+        quality: 35, // Lower quality for smaller size
         preset: 'medium',
       },
       audio: {
@@ -270,7 +270,7 @@ export const Presets = {
       format: OutputFormat.GIF,
       video: {
         fps: 15,
-        size: '480x?',  // Auto height
+        size: '480x?', // Auto height
         filters: {
           scale: {
             width: 480,
@@ -283,7 +283,7 @@ export const Presets = {
         disabled: true,
       },
       timing: {
-        duration: 10,  // Short clips for GIF
+        duration: 10, // Short clips for GIF
       },
     } as Partial<ConversionConfig>,
   },
@@ -390,7 +390,7 @@ export function applyPreset(
   presetName: keyof typeof Presets
 ): ConversionConfig {
   const preset = Presets[presetName];
-  
+
   return {
     ...preset.config,
     ...baseConfig,
@@ -404,4 +404,3 @@ export function applyPreset(
     },
   } as ConversionConfig;
 }
-

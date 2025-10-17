@@ -1,11 +1,17 @@
-import type { MediaMetadata, StreamMetadata, FormatMetadata, VideoMetadata, ImageMetadata } from '../types/metadata';
+import type {
+  MediaMetadata,
+  StreamMetadata,
+  FormatMetadata,
+  VideoMetadata,
+  ImageMetadata,
+} from '../types/metadata';
 
 /**
  * Parse FFprobe JSON output into MediaMetadata
  */
 export function parseMediaMetadata(jsonOutput: string): MediaMetadata {
   const data = JSON.parse(jsonOutput);
-  
+
   const format: FormatMetadata = {
     filename: data.format.filename,
     formatName: data.format.format_name,
@@ -24,7 +30,7 @@ export function parseMediaMetadata(jsonOutput: string): MediaMetadata {
     codecLongName: stream.codec_long_name,
     codecType: stream.codec_type,
     codecTag: stream.codec_tag_string,
-    
+
     // Video specific
     width: stream.width,
     height: stream.height,
@@ -34,13 +40,13 @@ export function parseMediaMetadata(jsonOutput: string): MediaMetadata {
     pixelFormat: stream.pix_fmt,
     frameRate: stream.r_frame_rate,
     avgFrameRate: stream.avg_frame_rate,
-    
+
     // Audio specific
     sampleRate: stream.sample_rate,
     channels: stream.channels,
     channelLayout: stream.channel_layout,
     bitsPerSample: stream.bits_per_sample,
-    
+
     // Common
     duration: stream.duration,
     durationTs: stream.duration_ts,
@@ -60,7 +66,7 @@ export function parseVideoMetadata(metadata: MediaMetadata): VideoMetadata {
   const videoStreams = metadata.streams.filter(s => s.codecType === 'video');
   const audioStreams = metadata.streams.filter(s => s.codecType === 'audio');
   const subtitleStreams = metadata.streams.filter(s => s.codecType === 'subtitle');
-  
+
   if (videoStreams.length === 0) {
     throw new Error('No video stream found in media file');
   }
@@ -105,7 +111,7 @@ export function parseVideoMetadata(metadata: MediaMetadata): VideoMetadata {
  */
 export function parseImageMetadata(metadata: MediaMetadata): ImageMetadata {
   const videoStreams = metadata.streams.filter(s => s.codecType === 'video');
-  
+
   if (videoStreams.length === 0) {
     throw new Error('No image stream found in file');
   }
@@ -122,4 +128,3 @@ export function parseImageMetadata(metadata: MediaMetadata): ImageMetadata {
     size,
   };
 }
-

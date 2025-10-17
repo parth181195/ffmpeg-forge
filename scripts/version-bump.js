@@ -21,13 +21,13 @@ function updateVersion(type) {
   try {
     // Update package.json version
     execSync(`npm version ${type} --no-git-tag-version`, { stdio: 'inherit' });
-    
+
     const newVersion = getCurrentVersion();
     console.log(`✅ Version updated to ${newVersion}`);
-    
+
     // Update CHANGELOG.md
     updateChangelog(newVersion, type);
-    
+
     console.log(`\n📝 Next steps:`);
     console.log(`1. Review the changes:`);
     console.log(`   git diff`);
@@ -35,7 +35,6 @@ function updateVersion(type) {
     console.log(`   git add -A && git commit -m "chore: bump version to ${newVersion}"`);
     console.log(`3. Push to trigger release:`);
     console.log(`   git push`);
-    
   } catch (error) {
     console.error('❌ Error updating version:', error.message);
     process.exit(1);
@@ -59,7 +58,7 @@ function updateChangelog(version, type) {
   // Insert new entry after the header
   const lines = changelog.split('\n');
   const headerEndIndex = lines.findIndex(line => line.startsWith('## ['));
-  
+
   if (headerEndIndex === -1) {
     // No existing changelog, create new one
     changelog = `# Changelog

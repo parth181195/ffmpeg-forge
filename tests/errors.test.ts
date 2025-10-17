@@ -11,9 +11,9 @@ import {
 describe('Error Handling', () => {
   describe('FormatNotSupportedError', () => {
     it('should throw when format is not supported', async () => {
-      await expect(
-        FFmpeg.canOutputFormat('invalid_format_xyz', true)
-      ).rejects.toThrow(FormatNotSupportedError);
+      await expect(FFmpeg.canOutputFormat('invalid_format_xyz', true)).rejects.toThrow(
+        FormatNotSupportedError
+      );
     });
 
     it('should have correct error properties', async () => {
@@ -63,8 +63,7 @@ describe('Error Handling', () => {
         // This should throw either HardwareAccelerationError or CodecNotSupportedError
         // depending on whether the codec exists but hardware is not available
         expect(
-          err instanceof HardwareAccelerationError || 
-          err instanceof CodecNotSupportedError
+          err instanceof HardwareAccelerationError || err instanceof CodecNotSupportedError
         ).toBe(true);
       }
     });
@@ -78,10 +77,10 @@ describe('Error Handling', () => {
 
       expect(formatError).toBeInstanceOf(FFmpegError);
       expect(formatError).toBeInstanceOf(Error);
-      
+
       expect(codecError).toBeInstanceOf(FFmpegError);
       expect(codecError).toBeInstanceOf(Error);
-      
+
       expect(hwError).toBeInstanceOf(FFmpegError);
       expect(hwError).toBeInstanceOf(Error);
     });
@@ -94,10 +93,7 @@ describe('Error Handling', () => {
     });
 
     it('should throw when throwOnError is true', async () => {
-      await expect(
-        FFmpeg.canOutputFormat('invalid_format', true)
-      ).rejects.toThrow();
+      await expect(FFmpeg.canOutputFormat('invalid_format', true)).rejects.toThrow();
     });
   });
 });
-

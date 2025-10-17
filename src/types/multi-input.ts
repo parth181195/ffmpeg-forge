@@ -8,15 +8,15 @@ import type { FilterSpec } from './filters';
 export interface MultiInputConfig {
   inputs: MultiInput[];
   output: string | NodeJS.WritableStream;
-  
+
   // Output settings
   video?: VideoConfig;
   audio?: AudioConfig;
   format?: string;
-  
+
   // Complex filter graph for combining inputs
   filterGraph: FilterSpec[];
-  
+
   // Map which streams to include
   streamMap?: StreamMapping[];
 }
@@ -26,17 +26,17 @@ export interface MultiInputConfig {
  */
 export interface MultiInput {
   source: InputSource;
-  label?: string;              // Label for referencing in filters (e.g., 'main', 'overlay')
-  
+  label?: string; // Label for referencing in filters (e.g., 'main', 'overlay')
+
   // Stream selection
-  videoStream?: number | false;  // Which video stream (0, 1, ...) or false to disable
-  audioStream?: number | false;  // Which audio stream
+  videoStream?: number | false; // Which video stream (0, 1, ...) or false to disable
+  audioStream?: number | false; // Which audio stream
   subtitleStream?: number | false;
-  
+
   // Input-specific options
   seek?: string | number;
   duration?: string | number;
-  
+
   // Hardware acceleration for this input
   hwaccel?: string;
 }
@@ -45,9 +45,9 @@ export interface MultiInput {
  * Stream mapping for output
  */
 export interface StreamMapping {
-  input: number | string;      // Input index or label
-  stream: string;               // Stream specifier: 'v:0', 'a:0', etc.
-  output?: number;              // Output file index (for multiple outputs)
+  input: number | string; // Input index or label
+  stream: string; // Stream specifier: 'v:0', 'a:0', etc.
+  output?: number; // Output file index (for multiple outputs)
 }
 
 /**
@@ -65,7 +65,7 @@ export interface OutputSpec {
   video?: VideoConfig;
   audio?: AudioConfig;
   format?: string;
-  streamMap?: string[];  // Which streams to include
+  streamMap?: string[]; // Which streams to include
 }
 
 /**
@@ -75,21 +75,21 @@ export interface PictureInPictureConfig {
   main: InputSource;
   overlay: InputSource;
   output: string;
-  
+
   // Overlay position
   position?: 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right' | 'center';
-  x?: number | string;  // Pixels or expression: 'main_w-overlay_w-10'
+  x?: number | string; // Pixels or expression: 'main_w-overlay_w-10'
   y?: number | string;
-  
+
   // Overlay size
   overlaySize?: string | { width: number; height: number };
-  
+
   // Border
   border?: {
     width: number;
     color: string;
   };
-  
+
   // Output settings
   video?: VideoConfig;
   audio?: 'main' | 'overlay' | 'both' | 'none';
@@ -102,22 +102,21 @@ export interface SideBySideConfig {
   left: InputSource;
   right: InputSource;
   output: string;
-  
+
   // Orientation
   orientation?: 'horizontal' | 'vertical';
-  
+
   // Separator
   separator?: {
     width: number;
     color: string;
   };
-  
+
   // Resize videos to match
   matchSize?: boolean;
   targetSize?: string;
-  
+
   // Output settings
   video?: VideoConfig;
   audio?: 'left' | 'right' | 'both' | 'none';
 }
-

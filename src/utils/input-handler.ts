@@ -32,7 +32,10 @@ export async function prepareInput(input: InputSource): Promise<InputInfo> {
   }
 
   // Generate temporary file path
-  const tempPath = join(tmpdir(), `ffmpeg-${Date.now()}-${Math.random().toString(36).slice(2)}.tmp`);
+  const tempPath = join(
+    tmpdir(),
+    `ffmpeg-${Date.now()}-${Math.random().toString(36).slice(2)}.tmp`
+  );
 
   if (type === 'buffer') {
     // Write buffer to temporary file
@@ -49,11 +52,11 @@ export async function prepareInput(input: InputSource): Promise<InputInfo> {
     const stream = input as ReadStream;
     return new Promise((resolve, reject) => {
       const chunks: Buffer[] = [];
-      
-      stream.on('data', (chunk) => {
+
+      stream.on('data', chunk => {
         chunks.push(Buffer.from(chunk));
       });
-      
+
       stream.on('end', () => {
         const buffer = Buffer.concat(chunks);
         writeFileSync(tempPath, buffer);
@@ -63,8 +66,8 @@ export async function prepareInput(input: InputSource): Promise<InputInfo> {
           tempPath,
         });
       });
-      
-      stream.on('error', (error) => {
+
+      stream.on('error', error => {
         reject(error);
       });
     });
@@ -92,4 +95,3 @@ export function cleanupInput(inputInfo: InputInfo): void {
 export function getInputPath(inputInfo: InputInfo): string {
   return inputInfo.tempPath || (inputInfo.source as string);
 }
-

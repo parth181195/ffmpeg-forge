@@ -11,7 +11,7 @@ await ffmpeg.convert({
   video: {
     codec: VideoCodec.H265,
     upscale: {
-      algorithm: ScalingAlgorithm.LANCZOS,  // Best quality
+      algorithm: ScalingAlgorithm.LANCZOS, // Best quality
       targetWidth: 3840,
       targetHeight: 2160,
       enhanceSharpness: true,
@@ -54,7 +54,7 @@ await ffmpeg.convert({
         height: 1080,
         algorithm: ScalingAlgorithm.LANCZOS,
         force_original_aspect_ratio: 'decrease',
-        force_divisible_by: 2,  // Required for some codecs
+        force_divisible_by: 2, // Required for some codecs
       },
     },
   },
@@ -72,7 +72,7 @@ await ffmpeg.convert({
     filters: {
       scale: {
         width: 1920,
-        height: -1,  // Auto-calculate to maintain aspect ratio
+        height: -1, // Auto-calculate to maintain aspect ratio
       },
     },
   },
@@ -83,7 +83,7 @@ await ffmpeg.convert({
   input: 'video.mp4',
   output: 'output.mp4',
   video: {
-    size: '?x1080',  // Shorthand syntax
+    size: '?x1080', // Shorthand syntax
   },
 });
 ```
@@ -156,10 +156,10 @@ await ffmpeg.convert({
   video: {
     filters: {
       color: {
-        brightness: 0.1,   // Increase brightness
-        contrast: 1.2,     // Increase contrast
-        saturation: 1.1,   // Slightly more vibrant
-        gamma: 1.2,        // Adjust gamma
+        brightness: 0.1, // Increase brightness
+        contrast: 1.2, // Increase contrast
+        saturation: 1.1, // Slightly more vibrant
+        gamma: 1.2, // Adjust gamma
       },
     },
   },
@@ -177,9 +177,9 @@ await ffmpeg.convert({
     filters: {
       crop: {
         width: 1920,
-        height: 800,  // Cinematic aspect
-        x: '(iw-1920)/2',  // Center horizontally
-        y: '(ih-800)/2',   // Center vertically
+        height: 800, // Cinematic aspect
+        x: '(iw-1920)/2', // Center horizontally
+        y: '(ih-800)/2', // Center vertically
       },
     },
   },
@@ -213,7 +213,7 @@ await ffmpeg.convert({
   video: {
     filters: {
       rotate: {
-        angle: 'PI/4',  // 45 degrees
+        angle: 'PI/4', // 45 degrees
         fillcolor: 'black',
         bilinear: true,
       },
@@ -246,8 +246,8 @@ await ffmpeg.convert({
     filters: {
       watermark: {
         input: 'logo.png',
-        x: 'main_w-overlay_w-10',  // 10px from right
-        y: 'main_h-overlay_h-10',  // 10px from bottom
+        x: 'main_w-overlay_w-10', // 10px from right
+        y: 'main_h-overlay_h-10', // 10px from bottom
         opacity: 0.7,
       },
     },
@@ -291,7 +291,7 @@ await ffmpeg.convert({
       fade: {
         type: 'in',
         start_time: 0,
-        duration: 2,  // 2 second fade in
+        duration: 2, // 2 second fade in
       },
     },
   },
@@ -309,7 +309,7 @@ await ffmpeg.convert({
   audio: {
     filters: {
       volume: {
-        volume: 1.5,  // 150% volume
+        volume: 1.5, // 150% volume
         precision: 'float',
       },
     },
@@ -323,7 +323,7 @@ await ffmpeg.convert({
   audio: {
     filters: {
       volume: {
-        volume: '10dB',  // Increase by 10dB
+        volume: '10dB', // Increase by 10dB
       },
     },
   },
@@ -356,7 +356,7 @@ await ffmpeg.convert({
   audio: {
     filters: {
       equalizer: [
-        { frequency: 100, width_type: 'q', width: 1, gain: 5 },   // Boost bass
+        { frequency: 100, width_type: 'q', width: 1, gain: 5 }, // Boost bass
         { frequency: 1000, width_type: 'q', width: 1, gain: -2 }, // Cut mids
         { frequency: 10000, width_type: 'q', width: 1, gain: 3 }, // Boost treble
       ],
@@ -374,7 +374,7 @@ await ffmpeg.convert({
   audio: {
     filters: {
       tempo: {
-        tempo: 1.5,  // 1.5x speed (without pitch change)
+        tempo: 1.5, // 1.5x speed (without pitch change)
       },
     },
   },
@@ -390,7 +390,7 @@ await ffmpeg.convert({
   audio: {
     filters: {
       pitch: {
-        pitch: 2,  // Up 2 semitones
+        pitch: 2, // Up 2 semitones
       },
     },
   },
@@ -493,11 +493,7 @@ await ffmpeg.convert({
   },
   audio: {
     filters: {
-      custom: [
-        'volume=1.5',
-        'highpass=f=200',
-        'lowpass=f=3000',
-      ],
+      custom: ['volume=1.5', 'highpass=f=200', 'lowpass=f=3000'],
     },
   },
 });
@@ -577,11 +573,11 @@ const presets = {
       volumeNormalization: true,
     },
   },
-  
+
   instagramStory: {
     video: {
       codec: VideoCodec.H264,
-      size: '1080x1920',  // Portrait
+      size: '1080x1920', // Portrait
       filters: {
         scale: {
           width: 1080,
@@ -591,10 +587,10 @@ const presets = {
       },
     },
     timing: {
-      duration: 15,  // 15 second clips
+      duration: 15, // 15 second clips
     },
   },
-  
+
   aiUpscale: {
     video: {
       codec: VideoCodec.H265,
@@ -617,4 +613,3 @@ await ffmpeg.convert({
   ...presets.youtubeUpload,
 });
 ```
-

@@ -7,14 +7,14 @@ export interface ConversionSuggestion {
   currentVideoCodec: string;
   currentAudioCodec?: string;
   currentResolution: string;
-  
+
   suggestedFormats: string[];
   suggestedVideoCodecs: {
     cpu: string[];
     gpu: string[];
   };
   suggestedAudioCodecs: string[];
-  
+
   canTranscode: boolean;
   canRemux: boolean; // Can change container without re-encoding
 }
@@ -26,7 +26,7 @@ export interface ConversionCompatibility {
   targetVideoCodec: string;
   sourceAudioCodec?: string;
   targetAudioCodec?: string;
-  
+
   compatible: boolean;
   requiresTranscode: boolean;
   canDirectCopy: boolean;
@@ -48,4 +48,3 @@ export interface ConversionRecommendation {
     reason: string;
   }>;
 }
-

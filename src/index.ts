@@ -36,4 +36,3 @@ export type {
   TrailerConfig,
   TrailerResult,
 } from './types';
-

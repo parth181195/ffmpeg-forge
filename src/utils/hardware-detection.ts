@@ -1,4 +1,8 @@
-import { GPU_CODEC_PATTERNS, HardwareAcceleration, type HardwareAccelerationValue } from '../types/hardware';
+import {
+  GPU_CODEC_PATTERNS,
+  HardwareAcceleration,
+  type HardwareAccelerationValue,
+} from '../types/hardware';
 
 /**
  * Check if a codec uses GPU acceleration
@@ -36,7 +40,7 @@ export function filterCodecsByAcceleration(
   acceleration: HardwareAccelerationValue
 ): string[] {
   const accelValue = typeof acceleration === 'string' ? acceleration : acceleration;
-  
+
   if (accelValue === HardwareAcceleration.ANY || accelValue === 'any') {
     return codecs;
   }
@@ -50,8 +54,5 @@ export function filterCodecsByAcceleration(
     return [];
   }
 
-  return codecs.filter(codec =>
-    patterns.some(pattern => codec.includes(pattern))
-  );
+  return codecs.filter(codec => patterns.some(pattern => codec.includes(pattern)));
 }
-

@@ -12,4 +12,3 @@ export interface CommandOptions {
   hideOutput?: boolean;
   customArgs?: string[];
 }
-

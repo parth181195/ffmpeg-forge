@@ -65,8 +65,11 @@
   },
   "homepage": "https://github.com/parth181195/ffmpeg-forge#readme",
   "lint-staged": {
-    "*.{ts,tsx}": [
-      "npm run type-check"
+    "src/**/*.{ts,tsx}": [
+      "tsc --noEmit"
+    ],
+    "tests/**/*.{ts,tsx}": [
+      "tsc --noEmit --project tsconfig.test.json"
     ],
     "*.{js,ts,tsx,json,md}": [
       "prettier --write"

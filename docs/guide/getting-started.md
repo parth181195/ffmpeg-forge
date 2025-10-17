@@ -53,23 +53,29 @@ pnpm add ffmpeg-forge
 ### Installing FFmpeg
 
 ::: details Ubuntu/Debian
+
 ```bash
 sudo apt update
 sudo apt install ffmpeg
 ```
+
 :::
 
 ::: details macOS
+
 ```bash
 brew install ffmpeg
 ```
+
 :::
 
 ::: details Windows
 Download from [ffmpeg.org](https://ffmpeg.org/download.html) or use:
+
 ```bash
 choco install ffmpeg
 ```
+
 :::
 
 ## Your First Conversion
@@ -99,7 +105,7 @@ That's it! The conversion will start, and you'll get a fully converted video.
 ## With Progress Tracking
 
 ```typescript
-ffmpeg.on('progress', (progress) => {
+ffmpeg.on('progress', progress => {
   console.log(`Progress: ${progress.percent}%`);
   console.log(`FPS: ${progress.currentFps}`);
 });
@@ -126,4 +132,3 @@ await ffmpeg.convert({
 
 - Check the existing guides in the docs/ folder
 - Report issues on [GitHub](https://github.com/parth181195/ffmpeg-forge/issues)
-

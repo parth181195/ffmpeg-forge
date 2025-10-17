@@ -9,7 +9,7 @@ export enum OutputFormat {
   MPEG = 'mpeg',
   MPEGTS = 'mpegts',
   OGV = 'ogg',
-  
+
   // Audio Formats
   MP3 = 'mp3',
   AAC = 'aac',
@@ -18,7 +18,7 @@ export enum OutputFormat {
   FLAC = 'flac',
   WAV = 'wav',
   M4A = 'm4a',
-  
+
   // Image Formats
   GIF = 'gif',
   APNG = 'apng',
@@ -27,4 +27,3 @@ export enum OutputFormat {
 }
 
 export type OutputFormatValue = OutputFormat | string;
-

@@ -1,4 +1,8 @@
-import type { ConversionSuggestion, ConversionCompatibility, ConversionRecommendation } from '../types/conversion';
+import type {
+  ConversionSuggestion,
+  ConversionCompatibility,
+  ConversionRecommendation,
+} from '../types/conversion';
 import type { VideoMetadata } from '../types/metadata';
 import { VideoCodec, AudioCodec } from '../types/codecs';
 import { OutputFormat } from '../types/formats';
@@ -8,30 +12,30 @@ import { OutputFormat } from '../types/formats';
  * Maps source format to compatible target formats
  */
 const FORMAT_COMPATIBILITY: Record<string, string[]> = {
-  'mp4': ['mp4', 'webm', 'mkv', 'avi', 'mov', 'flv', 'ogv'],
-  'webm': ['webm', 'mp4', 'mkv', 'ogv'],
-  'mkv': ['mkv', 'mp4', 'webm', 'avi', 'mov'],
-  'matroska': ['mkv', 'mp4', 'webm', 'avi', 'mov'],
-  'avi': ['avi', 'mp4', 'mkv', 'mov'],
-  'mov': ['mov', 'mp4', 'mkv', 'webm'],
-  'flv': ['flv', 'mp4', 'mkv'],
-  'ogv': ['ogv', 'webm', 'mkv'],
+  mp4: ['mp4', 'webm', 'mkv', 'avi', 'mov', 'flv', 'ogv'],
+  webm: ['webm', 'mp4', 'mkv', 'ogv'],
+  mkv: ['mkv', 'mp4', 'webm', 'avi', 'mov'],
+  matroska: ['mkv', 'mp4', 'webm', 'avi', 'mov'],
+  avi: ['avi', 'mp4', 'mkv', 'mov'],
+  mov: ['mov', 'mp4', 'mkv', 'webm'],
+  flv: ['flv', 'mp4', 'mkv'],
+  ogv: ['ogv', 'webm', 'mkv'],
 };
 
 /**
  * Codec compatibility for direct copy (remuxing without transcoding)
  */
 export const CODEC_CONTAINER_COMPATIBILITY: Record<string, string[]> = {
-  'h264': ['mp4', 'mkv', 'mov', 'avi', 'flv', 'ts', 'm4v'],
-  'hevc': ['mp4', 'mkv', 'mov', 'ts'],
-  'vp8': ['webm', 'mkv'],
-  'vp9': ['webm', 'mkv'],
-  'av1': ['webm', 'mkv', 'mp4'],
-  'mpeg4': ['mp4', 'avi', 'mkv', '3gp'],
-  'aac': ['mp4', 'mov', 'mkv', 'flv', 'm4a'],
-  'opus': ['webm', 'mkv', 'ogg'],
-  'vorbis': ['webm', 'mkv', 'ogg'],
-  'mp3': ['mp3', 'mp4', 'mkv', 'avi'],
+  h264: ['mp4', 'mkv', 'mov', 'avi', 'flv', 'ts', 'm4v'],
+  hevc: ['mp4', 'mkv', 'mov', 'ts'],
+  vp8: ['webm', 'mkv'],
+  vp9: ['webm', 'mkv'],
+  av1: ['webm', 'mkv', 'mp4'],
+  mpeg4: ['mp4', 'avi', 'mkv', '3gp'],
+  aac: ['mp4', 'mov', 'mkv', 'flv', 'm4a'],
+  opus: ['webm', 'mkv', 'ogg'],
+  vorbis: ['webm', 'mkv', 'ogg'],
+  mp3: ['mp3', 'mp4', 'mkv', 'avi'],
 };
 
 /**
@@ -51,30 +55,37 @@ export function generateConversionSuggestions(
   const currentResolution = `${metadata.width}x${metadata.height}`;
 
   // Get compatible formats based on current format
-  const baseCompatibleFormats = FORMAT_COMPATIBILITY[currentFormat] || Object.keys(FORMAT_COMPATIBILITY);
-  const suggestedFormats = baseCompatibleFormats.filter(fmt => availableFormats.muxing.includes(fmt));
-
-  // Suggest video codecs (split by CPU/GPU)
-  const cpuCodecs = availableCodecs.video.encoders.filter(codec =>
-    !codec.includes('_nvenc') &&
-    !codec.includes('_qsv') &&
-    !codec.includes('_amf') &&
-    !codec.includes('_vaapi') &&
-    !codec.includes('_v4l2m2m') &&
-    !codec.includes('_videotoolbox')
+  const baseCompatibleFormats =
+    FORMAT_COMPATIBILITY[currentFormat] || Object.keys(FORMAT_COMPATIBILITY);
+  const suggestedFormats = baseCompatibleFormats.filter(fmt =>
+    availableFormats.muxing.includes(fmt)
   );
 
-  const gpuCodecs = availableCodecs.video.encoders.filter(codec =>
-    codec.includes('_nvenc') ||
-    codec.includes('_qsv') ||
-    codec.includes('_amf') ||
-    codec.includes('_vaapi') ||
-    codec.includes('_videotoolbox')
+  // Suggest video codecs (split by CPU/GPU)
+  const cpuCodecs = availableCodecs.video.encoders.filter(
+    codec =>
+      !codec.includes('_nvenc') &&
+      !codec.includes('_qsv') &&
+      !codec.includes('_amf') &&
+      !codec.includes('_vaapi') &&
+      !codec.includes('_v4l2m2m') &&
+      !codec.includes('_videotoolbox')
+  );
+
+  const gpuCodecs = availableCodecs.video.encoders.filter(
+    codec =>
+      codec.includes('_nvenc') ||
+      codec.includes('_qsv') ||
+      codec.includes('_amf') ||
+      codec.includes('_vaapi') ||
+      codec.includes('_videotoolbox')
   );
 
   // Suggest audio codecs
   const suggestedAudioCodecs = availableCodecs.audio.encoders.filter(codec =>
-    ['aac', 'libmp3lame', 'libopus', 'libvorbis', 'flac', 'ac3'].some(common => codec.includes(common))
+    ['aac', 'libmp3lame', 'libopus', 'libvorbis', 'flac', 'ac3'].some(common =>
+      codec.includes(common)
+    )
   );
 
   // Check if transcoding is possible
@@ -130,7 +141,11 @@ export function checkConversionCompatibility(
     estimatedQuality = 'lossless';
   } else if (targetVideoCodec.includes('ffv1') || targetVideoCodec.includes('copy')) {
     estimatedQuality = 'lossless';
-  } else if (targetVideoCodec.includes('264') || targetVideoCodec.includes('265') || targetVideoCodec.includes('vp9')) {
+  } else if (
+    targetVideoCodec.includes('264') ||
+    targetVideoCodec.includes('265') ||
+    targetVideoCodec.includes('vp9')
+  ) {
     estimatedQuality = 'high';
   } else if (targetVideoCodec.includes('vp8') || targetVideoCodec.includes('mpeg4')) {
     estimatedQuality = 'medium';

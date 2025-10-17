@@ -95,6 +95,7 @@ npm install ffmpeg-forge
 ```
 
 **Requirements:**
+
 - Node.js 16+
 - FFmpeg 4.0+ installed on your system
 
@@ -108,4 +109,3 @@ npm install ffmpeg-forge
 - [Quick Start](/guide/quick-start) - See code examples
 
 </div>
-

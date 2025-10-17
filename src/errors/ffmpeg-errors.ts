@@ -2,7 +2,10 @@
  * Base class for all FFmpeg-related errors
  */
 export class FFmpegError extends Error {
-  constructor(message: string, public readonly code?: string) {
+  constructor(
+    message: string,
+    public readonly code?: string
+  ) {
     super(message);
     this.name = 'FFmpegError';
     Object.setPrototypeOf(this, FFmpegError.prototype);
@@ -107,12 +110,12 @@ export class InvalidOutputError extends FFmpegError {
  * Thrown when hardware acceleration is not available
  */
 export class HardwareAccelerationError extends FFmpegError {
-  constructor(
-    public readonly accelerationType: string
-  ) {
-    super(`Hardware acceleration '${accelerationType}' is not available`, 'HARDWARE_ACCEL_NOT_AVAILABLE');
+  constructor(public readonly accelerationType: string) {
+    super(
+      `Hardware acceleration '${accelerationType}' is not available`,
+      'HARDWARE_ACCEL_NOT_AVAILABLE'
+    );
     this.name = 'HardwareAccelerationError';
     Object.setPrototypeOf(this, HardwareAccelerationError.prototype);
   }
 }
-

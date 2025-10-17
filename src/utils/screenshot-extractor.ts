@@ -11,55 +11,55 @@ import { FFmpegExecutionError } from '../errors/ffmpeg-errors';
  */
 export class ScreenshotExtractor {
   constructor(private ffmpegPath: string = 'ffmpeg') {}
-  
+
   /**
    * Extract single screenshot
    */
   async extractOne(config: ScreenshotConfig): Promise<string> {
     const inputInfo = await prepareInput(config.input);
     const inputPath = getInputPath(inputInfo);
-    
+
     try {
       const output = Array.isArray(config.output) ? config.output[0] : config.output;
       mkdirSync(dirname(output), { recursive: true });
-      
+
       const args = ['-hide_banner'];
-      
+
       // Seek to time (before input for speed)
       if (config.time !== undefined) {
-        const timeStr = typeof config.time === 'number' 
-          ? this.formatTime(config.time) 
-          : config.time;
+        const timeStr =
+          typeof config.time === 'number' ? this.formatTime(config.time) : config.time;
         args.push('-ss', timeStr);
       }
-      
+
       args.push('-i', inputPath);
-      
+
       // Frame number (if specified instead of time)
       if (config.frame !== undefined) {
         args.push('-vf', `select='eq(n,${config.frame})'`, '-vframes', '1');
       } else {
         args.push('-vframes', '1');
       }
-      
+
       // Size
       if (config.size) {
-        const size = typeof config.size === 'string' 
-          ? config.size 
-          : `${config.size.width}x${config.size.height}`;
+        const size =
+          typeof config.size === 'string'
+            ? config.size
+            : `${config.size.width}x${config.size.height}`;
         args.push('-s', size);
       }
-      
+
       // Aspect ratio
       if (config.aspectRatio) {
         args.push('-aspect', config.aspectRatio);
       }
-      
+
       // Quality
       if (config.quality) {
         args.push('-q:v', config.quality.toString());
       }
-      
+
       // Filters
       if (config.filters) {
         const filterString = FilterBuilder.buildVideoFilters(config.filters);
@@ -73,11 +73,11 @@ export class ScreenshotExtractor {
           }
         }
       }
-      
+
       args.push('-y', output);
-      
+
       await this.runFFmpeg(args);
-      
+
       return output;
     } finally {
       if (inputInfo.tempPath) {
@@ -85,27 +85,25 @@ export class ScreenshotExtractor {
       }
     }
   }
-  
+
   /**
    * Extract multiple screenshots
    */
   async extractMultiple(config: ScreenshotsConfig): Promise<ScreenshotResult> {
     const inputInfo = await prepareInput(config.input);
     const inputPath = getInputPath(inputInfo);
-    
+
     try {
       const folder = config.folder || '.';
       const filename = config.filename || 'screenshot-%i.jpg';
-      
+
       mkdirSync(folder, { recursive: true });
-      
+
       let timestamps: number[] = [];
-      
+
       // Determine timestamps
       if (config.timestamps) {
-        timestamps = config.timestamps.map(t => 
-          typeof t === 'number' ? t : this.parseTime(t)
-        );
+        timestamps = config.timestamps.map(t => (typeof t === 'number' ? t : this.parseTime(t)));
       } else if (config.count) {
         // Get video duration and distribute evenly
         const duration = await this.getVideoDuration(inputPath);
@@ -122,45 +120,49 @@ export class ScreenshotExtractor {
       } else {
         throw new Error('Must specify timestamps, count, or interval');
       }
-      
+
       // Extract each screenshot
       const files: string[] = [];
-      
+
       for (let i = 0; i < timestamps.length; i++) {
         const time = timestamps[i];
         const outputFile = join(folder, filename.replace('%i', (i + 1).toString()));
-        
+
         const args = [
           '-hide_banner',
-          '-ss', this.formatTime(time),
-          '-i', inputPath,
-          '-vframes', '1',
+          '-ss',
+          this.formatTime(time),
+          '-i',
+          inputPath,
+          '-vframes',
+          '1',
         ];
-        
+
         if (config.size) {
-          const size = typeof config.size === 'string' 
-            ? config.size 
-            : `${config.size.width}x${config.size.height}`;
+          const size =
+            typeof config.size === 'string'
+              ? config.size
+              : `${config.size.width}x${config.size.height}`;
           args.push('-s', size);
         }
-        
+
         if (config.quality) {
           args.push('-q:v', config.quality.toString());
         }
-        
+
         if (config.filters) {
           const filterString = FilterBuilder.buildVideoFilters(config.filters);
           if (filterString) {
             args.push('-vf', filterString);
           }
         }
-        
+
         args.push('-y', outputFile);
-        
+
         await this.runFFmpeg(args);
         files.push(outputFile);
       }
-      
+
       return {
         files,
         count: files.length,
@@ -172,7 +174,7 @@ export class ScreenshotExtractor {
       }
     }
   }
-  
+
   /**
    * Get video duration
    */
@@ -180,18 +182,21 @@ export class ScreenshotExtractor {
     return new Promise((resolve, reject) => {
       const ffprobe = this.ffmpegPath.replace('ffmpeg', 'ffprobe');
       const process = spawn(ffprobe, [
-        '-v', 'error',
-        '-show_entries', 'format=duration',
-        '-of', 'default=noprint_wrappers=1:nokey=1',
+        '-v',
+        'error',
+        '-show_entries',
+        'format=duration',
+        '-of',
+        'default=noprint_wrappers=1:nokey=1',
         inputPath,
       ]);
-      
+
       let output = '';
       process.stdout.on('data', (data: Buffer) => {
         output += data.toString();
       });
-      
-      process.on('close', (code) => {
+
+      process.on('close', code => {
         if (code === 0) {
           resolve(parseFloat(output.trim()));
         } else {
@@ -200,7 +205,7 @@ export class ScreenshotExtractor {
       });
     });
   }
-  
+
   /**
    * Run FFmpeg command
    */
@@ -208,29 +213,31 @@ export class ScreenshotExtractor {
     return new Promise((resolve, reject) => {
       const process = spawn(this.ffmpegPath, args);
       let stderr = '';
-      
+
       process.stderr?.on('data', (data: Buffer) => {
         stderr += data.toString();
       });
-      
-      process.on('close', (code) => {
+
+      process.on('close', code => {
         if (code === 0) {
           resolve();
         } else {
-          reject(new FFmpegExecutionError(
-            'Screenshot extraction failed',
-            `${this.ffmpegPath} ${args.join(' ')}`,
-            stderr
-          ));
+          reject(
+            new FFmpegExecutionError(
+              'Screenshot extraction failed',
+              `${this.ffmpegPath} ${args.join(' ')}`,
+              stderr
+            )
+          );
         }
       });
-      
-      process.on('error', (err) => {
+
+      process.on('error', err => {
         reject(new FFmpegExecutionError(`Failed to start FFmpeg: ${err.message}`));
       });
     });
   }
-  
+
   /**
    * Format time
    */
@@ -240,7 +247,7 @@ export class ScreenshotExtractor {
     const s = seconds % 60;
     return `${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}:${s.toFixed(2).padStart(5, '0')}`;
   }
-  
+
   /**
    * Parse time string
    */
@@ -252,4 +259,3 @@ export class ScreenshotExtractor {
     return 0;
   }
 }
-

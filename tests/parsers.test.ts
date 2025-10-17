@@ -12,7 +12,7 @@ libavcodec     58.134.100 / 58.134.100
 libavformat    58. 76.100 / 58. 76.100`;
 
       const result = parseVersion(mockOutput);
-      
+
       expect(result.version).toBe('4.4.2');
       expect(result.copyright).toContain('2000-2021');
       expect(result.libVersions).toHaveProperty('libavutil');
@@ -34,11 +34,11 @@ libavformat    58. 76.100 / 58. 76.100`;
  DE mp4             MP4 (MPEG-4 Part 14)`;
 
       const result = parseFormats(mockOutput);
-      
+
       expect(result.demuxing).toContain('3dostr');
       expect(result.demuxing).toContain('matroska');
       expect(result.demuxing).toContain('mp4');
-      
+
       expect(result.muxing).toContain('3g2');
       expect(result.muxing).toContain('3gp');
       expect(result.muxing).toContain('matroska');
@@ -58,7 +58,7 @@ libavformat    58. 76.100 / 58. 76.100`;
  A..... aac                  AAC (Advanced Audio Coding)`;
 
       const result = parseEncoders(mockOutput);
-      
+
       expect(result.video).toContain('libx264');
       expect(result.video).toContain('libx265');
       expect(result.audio).toContain('aac');
@@ -77,11 +77,10 @@ libavformat    58. 76.100 / 58. 76.100`;
  A..... aac                  AAC (Advanced Audio Coding)`;
 
       const result = parseDecoders(mockOutput);
-      
+
       expect(result.video).toContain('h264');
       expect(result.video).toContain('hevc');
       expect(result.audio).toContain('aac');
     });
   });
 });
-

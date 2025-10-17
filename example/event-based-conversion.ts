@@ -15,15 +15,15 @@ async function main() {
 
   // Example 1: Basic event-based conversion
   console.log('📹 Example 1: Basic event-based conversion');
-  
+
   const config: ConversionConfig = {
     input: 'tests/fixtures/short/mp4/h264/480p.mp4',
     output: 'tests/output/event-conversion.mp4',
     video: {
       codec: 'h264',
       quality: 23,
-      size: '1280x720'  // Fixed: use proper FFmpeg size format
-    }
+      size: '1280x720', // Fixed: use proper FFmpeg size format
+    },
   };
 
   const conversion = ffmpeg.convert(config);
@@ -35,7 +35,9 @@ async function main() {
   });
 
   conversion.events.progress((progress) => {
-    console.log(`📊 Progress: ${progress.percent?.toFixed(1) || 0}% - ${progress.timemark || '00:00:00'}`);
+    console.log(
+      `📊 Progress: ${progress.percent?.toFixed(1) || 0}% - ${progress.timemark || '00:00:00'}`
+    );
   });
 
   conversion.events.end(() => {
@@ -56,45 +58,45 @@ async function main() {
 
   // Example 2: Multiple conversions with individual progress tracking
   console.log('📹 Example 2: Multiple conversions with individual progress');
-  
+
   const conversions = [
     {
       config: {
         input: 'tests/fixtures/short/mp4/h264/480p.mp4',
         output: 'tests/output/conversion-1.mp4',
-        video: { codec: 'h264', quality: 23 }
+        video: { codec: 'h264', quality: 23 },
       } as ConversionConfig,
-      name: 'Conversion 1'
+      name: 'Conversion 1',
     },
     {
       config: {
         input: 'tests/fixtures/short/mp4/h264/480p.mp4',
         output: 'tests/output/conversion-2.mp4',
-        video: { codec: 'h264', quality: 28 }  // Use h264 instead of h265
+        video: { codec: 'h264', quality: 28 }, // Use h264 instead of h265
       } as ConversionConfig,
-      name: 'Conversion 2'
-    }
+      name: 'Conversion 2',
+    },
   ];
 
   const results = conversions.map(({ config, name }) => {
     const conversion = ffmpeg.convert(config);
-    
+
     conversion.events.start(() => {
       console.log(`🚀 ${name} started`);
     });
-    
-    conversion.events.progress((progress) => {
+
+    conversion.events.progress(progress => {
       console.log(`📊 ${name}: ${progress.percent?.toFixed(1) || 0}%`);
     });
-    
+
     conversion.events.end(() => {
       console.log(`✅ ${name} completed`);
     });
-    
-    conversion.events.error((error) => {
+
+    conversion.events.error(error => {
       console.error(`❌ ${name} failed:`, error.message);
     });
-    
+
     return conversion;
   });
 
@@ -108,20 +110,20 @@ async function main() {
 
   // Example 3: Conversion with cancellation
   console.log('📹 Example 3: Conversion with cancellation');
-  
+
   const longConversion = ffmpeg.convert({
     input: 'tests/fixtures/long/mp4/h264/1080p.mp4',
     output: 'tests/output/long-conversion.mp4',
-    video: { codec: 'h264', quality: 18 } // High quality = slower
+    video: { codec: 'h264', quality: 18 }, // High quality = slower
   });
 
   longConversion.events.start(() => {
     console.log('🚀 Long conversion started');
   });
 
-  longConversion.events.progress((progress) => {
+  longConversion.events.progress(progress => {
     console.log(`📊 Long conversion: ${progress.percent?.toFixed(1) || 0}%`);
-    
+
     // Cancel after 5% progress
     if (progress.percent && progress.percent > 5) {
       console.log('🛑 Cancelling conversion...');
@@ -133,7 +135,7 @@ async function main() {
     console.log('✅ Long conversion completed');
   });
 
-  longConversion.events.error((error) => {
+  longConversion.events.error(error => {
     console.log('❌ Long conversion failed (expected if cancelled):', error.message);
   });
 
@@ -145,18 +147,18 @@ async function main() {
 
   // Example 4: Buffer conversion with events
   console.log('📹 Example 4: Buffer conversion with events');
-  
+
   const bufferConversion = ffmpeg.convertToBuffer({
     input: 'tests/fixtures/short/mp4/h264/480p.mp4',
     video: { codec: 'h264', quality: 23 },
-    format: 'mp4'  // Specify format for buffer output
+    format: 'mp4', // Specify format for buffer output
   });
 
   bufferConversion.events.start(() => {
     console.log('🚀 Buffer conversion started');
   });
 
-  bufferConversion.events.progress((progress) => {
+  bufferConversion.events.progress(progress => {
     console.log(`📊 Buffer conversion: ${progress.percent?.toFixed(1) || 0}%`);
   });
 

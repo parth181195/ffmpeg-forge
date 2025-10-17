@@ -30,6 +30,7 @@ sudo apt install ffmpeg
 ```
 
 Verify installation:
+
 ```bash
 ffmpeg -version
 ```
@@ -37,6 +38,7 @@ ffmpeg -version
 ### macOS
 
 Using Homebrew:
+
 ```bash
 brew install ffmpeg
 ```
@@ -44,11 +46,13 @@ brew install ffmpeg
 ### Windows
 
 **Option 1: Chocolatey**
+
 ```bash
 choco install ffmpeg
 ```
 
 **Option 2: Manual**
+
 1. Download from [ffmpeg.org](https://ffmpeg.org/download.html)
 2. Extract to a folder (e.g., `C:\ffmpeg`)
 3. Add to PATH environment variable
@@ -97,12 +101,14 @@ console.log(`Video codecs: ${capabilities.videoCodecs.encoders.length}`);
 ### NVIDIA (NVENC)
 
 Install NVIDIA drivers and CUDA:
+
 ```bash
 # Ubuntu
 sudo apt install nvidia-driver-580 nvidia-cuda-toolkit
 ```
 
 Verify:
+
 ```bash
 nvidia-smi
 ```
@@ -110,6 +116,7 @@ nvidia-smi
 ### Intel (Quick Sync)
 
 Install VAAPI drivers:
+
 ```bash
 # Ubuntu
 sudo apt install intel-media-va-driver
@@ -118,6 +125,7 @@ sudo apt install intel-media-va-driver
 ### AMD (AMF)
 
 Install AMD drivers:
+
 ```bash
 # Ubuntu
 sudo apt install mesa-va-drivers
@@ -131,6 +139,7 @@ If you get "FFmpeg not found" error:
 
 1. Check FFmpeg is installed: `which ffmpeg`
 2. Set custom path:
+
 ```typescript
 FFmpeg.setFFmpegPath('/usr/local/bin/ffmpeg');
 ```
@@ -138,6 +147,7 @@ FFmpeg.setFFmpegPath('/usr/local/bin/ffmpeg');
 ### Hardware acceleration not working
 
 Check available hardware acceleration:
+
 ```typescript
 const hwInfo = await ffmpeg.getHardwareAccelerationInfo();
 console.log('Available:', hwInfo.available);
@@ -149,4 +159,3 @@ console.log('Types:', hwInfo.types);
 - [Quick Start](/guide/quick-start) - Common use cases
 - [Filters Guide](/FILTERS) - Apply video and audio effects
 - [Hardware Acceleration](/HARDWARE) - GPU encoding setup
-

@@ -2,17 +2,46 @@ import { EventEmitter } from 'events';
 import { execSync } from 'child_process';
 import { existsSync } from 'fs';
 import { CommandBuilder } from './command-builder';
-import { parseVersion, parseFormats, parseEncoders, parseDecoders, parseMediaMetadata, parseVideoMetadata, parseImageMetadata } from './parsers';
+import {
+  parseVersion,
+  parseFormats,
+  parseEncoders,
+  parseDecoders,
+  parseMediaMetadata,
+  parseVideoMetadata,
+  parseImageMetadata,
+} from './parsers';
 import type { FFmpegVersionInfo, FFmpegCapabilities } from './types/version';
 import type { MediaMetadata, VideoMetadata, ImageMetadata } from './types/metadata';
-import { HardwareAcceleration, type HardwareAccelerationValue, type HardwareAccelerationInfo } from './types/hardware';
+import {
+  HardwareAcceleration,
+  type HardwareAccelerationValue,
+  type HardwareAccelerationInfo,
+} from './types/hardware';
 import { StreamType, type StreamTypeValue } from './types/stream';
 import type { InputSource } from './types/input';
-import type { ConversionSuggestion, ConversionCompatibility, ConversionRecommendation } from './types/conversion';
-import type { ConversionConfig, ConversionCallbacks, BatchConversionCallbacks, ConversionResult, ConversionEvents, ProgressInfo, ConversionResultBuffer } from './types/conversion-config';
+import type {
+  ConversionSuggestion,
+  ConversionCompatibility,
+  ConversionRecommendation,
+} from './types/conversion';
+import type {
+  ConversionConfig,
+  ConversionCallbacks,
+  BatchConversionCallbacks,
+  ConversionResult,
+  ConversionEvents,
+  ProgressInfo,
+  ConversionResultBuffer,
+} from './types/conversion-config';
 import { filterCodecsByAcceleration, detectHardwareType } from './utils/hardware-detection';
 import { prepareInput, cleanupInput, getInputPath } from './utils/input-handler';
-import { generateConversionSuggestions, checkConversionCompatibility, getConversionRecommendation, CODEC_CONTAINER_COMPATIBILITY } from './utils/conversion-helper';
+import {
+  generateConversionSuggestions,
+  checkConversionCompatibility,
+  getConversionRecommendation,
+  CODEC_CONTAINER_COMPATIBILITY,
+} from './utils/conversion-helper';
 import { ExecutionEngine, BatchExecutionEngine } from './utils/execution-engine';
 import { CommandGenerator } from './utils/command-generator';
 import { ThumbnailExtractor } from './utils/thumbnail-extractor';
@@ -20,7 +49,12 @@ import { TrailerGenerator } from './utils/trailer-generator';
 import { ScreenshotExtractor } from './utils/screenshot-extractor';
 import { Concatenation } from './utils/concatenation';
 import { MultiInputHandler } from './utils/multi-input-handler';
-import type { ThumbnailConfig, ThumbnailResult, TrailerConfig, TrailerResult } from './types/thumbnail';
+import type {
+  ThumbnailConfig,
+  ThumbnailResult,
+  TrailerConfig,
+  TrailerResult,
+} from './types/thumbnail';
 import type { ScreenshotConfig, ScreenshotsConfig, ScreenshotResult } from './types/screenshot';
 import type { ConcatenationConfig, ConcatenationResult, MergeConfig } from './types/concat';
 import type { PictureInPictureConfig, SideBySideConfig } from './types/multi-input';
@@ -46,7 +80,7 @@ export class FFmpeg extends EventEmitter {
   constructor(options?: FFmpegConstructorOptions) {
     super();
     this.commandBuilder = new CommandBuilder();
-    
+
     // Set paths from constructor options if provided
     if (options?.ffmpegPath) {
       FFmpeg.setFFmpegPath(options.ffmpegPath);
@@ -54,7 +88,7 @@ export class FFmpeg extends EventEmitter {
       // Auto-detect ffmpeg path if not provided
       this.autoDetectFFmpegPath();
     }
-    
+
     if (options?.ffprobePath) {
       FFmpeg.setFFprobePath(options.ffprobePath);
     } else {
@@ -71,7 +105,7 @@ export class FFmpeg extends EventEmitter {
       // Try to find ffmpeg using 'which' command (Unix-like) or 'where' (Windows)
       const command = process.platform === 'win32' ? 'where ffmpeg' : 'which ffmpeg';
       const path = execSync(command, { encoding: 'utf-8' }).trim().split('\n')[0];
-      
+
       if (path && existsSync(path)) {
         FFmpeg.setFFmpegPath(path);
       }
@@ -89,7 +123,7 @@ export class FFmpeg extends EventEmitter {
       // Try to find ffprobe using 'which' command (Unix-like) or 'where' (Windows)
       const command = process.platform === 'win32' ? 'where ffprobe' : 'which ffprobe';
       const path = execSync(command, { encoding: 'utf-8' }).trim().split('\n')[0];
-      
+
       if (path && existsSync(path)) {
         FFmpeg.setFFprobePath(path);
       }
@@ -106,7 +140,7 @@ export class FFmpeg extends EventEmitter {
     try {
       execSync(`${FFmpeg.ffmpegPath} -version`, {
         encoding: 'utf-8',
-        stdio: ['pipe', 'pipe', 'pipe']
+        stdio: ['pipe', 'pipe', 'pipe'],
       });
     } catch (error) {
       throw new FFmpegNotFoundError(FFmpeg.ffmpegPath);
@@ -120,7 +154,7 @@ export class FFmpeg extends EventEmitter {
     try {
       execSync(`${FFmpeg.ffprobePath} -version`, {
         encoding: 'utf-8',
-        stdio: ['pipe', 'pipe', 'pipe']
+        stdio: ['pipe', 'pipe', 'pipe'],
       });
     } catch (error) {
       throw new FFprobeNotFoundError(FFmpeg.ffprobePath);
@@ -164,21 +198,23 @@ export class FFmpeg extends EventEmitter {
     return new Promise((resolve, reject) => {
       try {
         this.validateFFmpegPath();
-        
+
         const output = execSync(`${FFmpeg.ffmpegPath} -version`, {
           encoding: 'utf-8',
-          stdio: ['pipe', 'pipe', 'pipe']
+          stdio: ['pipe', 'pipe', 'pipe'],
         });
-        
+
         resolve(parseVersion(output));
       } catch (error) {
         if (error instanceof FFmpegNotFoundError) {
           reject(error);
         } else {
-          reject(new FFmpegExecutionError(
-            `Failed to get FFmpeg version: ${error instanceof Error ? error.message : 'Unknown error'}`,
-            `${FFmpeg.ffmpegPath} -version`
-          ));
+          reject(
+            new FFmpegExecutionError(
+              `Failed to get FFmpeg version: ${error instanceof Error ? error.message : 'Unknown error'}`,
+              `${FFmpeg.ffmpegPath} -version`
+            )
+          );
         }
       }
     });
@@ -191,21 +227,23 @@ export class FFmpeg extends EventEmitter {
     return new Promise((resolve, reject) => {
       try {
         this.validateFFmpegPath();
-        
+
         const output = execSync(`${FFmpeg.ffmpegPath} -formats`, {
           encoding: 'utf-8',
-          stdio: ['pipe', 'pipe', 'pipe']
+          stdio: ['pipe', 'pipe', 'pipe'],
         });
-        
+
         resolve(parseFormats(output));
       } catch (error) {
         if (error instanceof FFmpegNotFoundError) {
           reject(error);
         } else {
-          reject(new FFmpegExecutionError(
-            `Failed to get formats: ${error instanceof Error ? error.message : 'Unknown error'}`,
-            `${FFmpeg.ffmpegPath} -formats`
-          ));
+          reject(
+            new FFmpegExecutionError(
+              `Failed to get formats: ${error instanceof Error ? error.message : 'Unknown error'}`,
+              `${FFmpeg.ffmpegPath} -formats`
+            )
+          );
         }
       }
     });
@@ -222,34 +260,40 @@ export class FFmpeg extends EventEmitter {
     return new Promise(async (resolve, reject) => {
       try {
         this.validateFFmpegPath();
-        
+
         const [encodersOutput, decodersOutput] = await Promise.all([
-          Promise.resolve(execSync(`${FFmpeg.ffmpegPath} -encoders`, {
-            encoding: 'utf-8',
-            stdio: ['pipe', 'pipe', 'pipe']
-          })),
-          Promise.resolve(execSync(`${FFmpeg.ffmpegPath} -decoders`, {
-            encoding: 'utf-8',
-            stdio: ['pipe', 'pipe', 'pipe']
-          }))
+          Promise.resolve(
+            execSync(`${FFmpeg.ffmpegPath} -encoders`, {
+              encoding: 'utf-8',
+              stdio: ['pipe', 'pipe', 'pipe'],
+            })
+          ),
+          Promise.resolve(
+            execSync(`${FFmpeg.ffmpegPath} -decoders`, {
+              encoding: 'utf-8',
+              stdio: ['pipe', 'pipe', 'pipe'],
+            })
+          ),
         ]);
-        
+
         const encoders = parseEncoders(encodersOutput);
         const decoders = parseDecoders(decodersOutput);
-        
+
         resolve({
           video: { encoders: encoders.video, decoders: decoders.video },
           audio: { encoders: encoders.audio, decoders: decoders.audio },
-          subtitle: { encoders: encoders.subtitle, decoders: decoders.subtitle }
+          subtitle: { encoders: encoders.subtitle, decoders: decoders.subtitle },
         });
       } catch (error) {
         if (error instanceof FFmpegNotFoundError) {
           reject(error);
         } else {
-          reject(new FFmpegExecutionError(
-            `Failed to get codecs: ${error instanceof Error ? error.message : 'Unknown error'}`,
-            `${FFmpeg.ffmpegPath} -encoders/-decoders`
-          ));
+          reject(
+            new FFmpegExecutionError(
+              `Failed to get codecs: ${error instanceof Error ? error.message : 'Unknown error'}`,
+              `${FFmpeg.ffmpegPath} -encoders/-decoders`
+            )
+          );
         }
       }
     });
@@ -262,13 +306,13 @@ export class FFmpeg extends EventEmitter {
     const [version, formats, codecs] = await Promise.all([
       this.getVersion(),
       this.getFormats(),
-      this.getCodecs()
+      this.getCodecs(),
     ]);
-    
+
     return {
       version,
       formats,
-      codecs
+      codecs,
     };
   }
 
@@ -279,11 +323,11 @@ export class FFmpeg extends EventEmitter {
   static async canOutputFormat(format: string, throwOnError: boolean = false): Promise<boolean> {
     const formats = await this.getFormats();
     const supported = formats.muxing.includes(format);
-    
+
     if (!supported && throwOnError) {
       throw new FormatNotSupportedError(format, 'mux');
     }
-    
+
     return supported;
   }
 
@@ -301,12 +345,16 @@ export class FFmpeg extends EventEmitter {
     const codecs = await this.getCodecs();
     const availableEncoders = filterCodecsByAcceleration(codecs[type].encoders, acceleration);
     const supported = availableEncoders.includes(codec);
-    
+
     if (!supported && throwOnError) {
       // Check if it's a hardware acceleration issue
       const accelValue = typeof acceleration === 'string' ? acceleration : acceleration;
-      if (accelValue !== HardwareAcceleration.ANY && accelValue !== 'any' && 
-          accelValue !== HardwareAcceleration.CPU && accelValue !== 'cpu') {
+      if (
+        accelValue !== HardwareAcceleration.ANY &&
+        accelValue !== 'any' &&
+        accelValue !== HardwareAcceleration.CPU &&
+        accelValue !== 'cpu'
+      ) {
         const allEncoders = codecs[type].encoders;
         if (allEncoders.includes(codec)) {
           throw new HardwareAccelerationError(accelValue);
@@ -314,7 +362,7 @@ export class FFmpeg extends EventEmitter {
       }
       throw new CodecNotSupportedError(codec, type, 'encode');
     }
-    
+
     return supported;
   }
 
@@ -332,12 +380,16 @@ export class FFmpeg extends EventEmitter {
     const codecs = await this.getCodecs();
     const availableDecoders = filterCodecsByAcceleration(codecs[type].decoders, acceleration);
     const supported = availableDecoders.includes(codec);
-    
+
     if (!supported && throwOnError) {
       // Check if it's a hardware acceleration issue
       const accelValue = typeof acceleration === 'string' ? acceleration : acceleration;
-      if (accelValue !== HardwareAcceleration.ANY && accelValue !== 'any' && 
-          accelValue !== HardwareAcceleration.CPU && accelValue !== 'cpu') {
+      if (
+        accelValue !== HardwareAcceleration.ANY &&
+        accelValue !== 'any' &&
+        accelValue !== HardwareAcceleration.CPU &&
+        accelValue !== 'cpu'
+      ) {
         const allDecoders = codecs[type].decoders;
         if (allDecoders.includes(codec)) {
           throw new HardwareAccelerationError(accelValue);
@@ -345,7 +397,7 @@ export class FFmpeg extends EventEmitter {
       }
       throw new CodecNotSupportedError(codec, type, 'decode');
     }
-    
+
     return supported;
   }
 
@@ -385,12 +437,16 @@ export class FFmpeg extends EventEmitter {
 
     // Check video codec
     if (options.videoCodec && options.videoCodec !== 'copy') {
-      const videoSupported = await this.canEncodeWithCodec(options.videoCodec, 'video', acceleration);
+      const videoSupported = await this.canEncodeWithCodec(
+        options.videoCodec,
+        'video',
+        acceleration
+      );
       const hardwareType = detectHardwareType(options.videoCodec);
-      details.videoCodec = { 
-        supported: videoSupported, 
+      details.videoCodec = {
+        supported: videoSupported,
         name: options.videoCodec,
-        hardwareType 
+        hardwareType,
       };
       if (!videoSupported) {
         unsupported.push(`video codec: ${options.videoCodec} (${hardwareType})`);
@@ -399,7 +455,11 @@ export class FFmpeg extends EventEmitter {
 
     // Check audio codec
     if (options.audioCodec && options.audioCodec !== 'copy') {
-      const audioSupported = await this.canEncodeWithCodec(options.audioCodec, 'audio', acceleration);
+      const audioSupported = await this.canEncodeWithCodec(
+        options.audioCodec,
+        'audio',
+        acceleration
+      );
       details.audioCodec = { supported: audioSupported, name: options.audioCodec };
       if (!audioSupported) {
         unsupported.push(`audio codec: ${options.audioCodec}`);
@@ -409,7 +469,7 @@ export class FFmpeg extends EventEmitter {
     return {
       supported: unsupported.length === 0,
       details,
-      unsupported
+      unsupported,
     };
   }
 
@@ -428,7 +488,7 @@ export class FFmpeg extends EventEmitter {
         type: HardwareAcceleration.CPU,
         available: true,
         encoders: cpuEncoders,
-        decoders: cpuDecoders
+        decoders: cpuDecoders,
       });
     }
 
@@ -439,18 +499,18 @@ export class FFmpeg extends EventEmitter {
       HardwareAcceleration.AMD,
       HardwareAcceleration.VAAPI,
       HardwareAcceleration.VIDEOTOOLBOX,
-      HardwareAcceleration.V4L2
+      HardwareAcceleration.V4L2,
     ];
     for (const type of gpuTypes) {
       const encoders = filterCodecsByAcceleration(codecs.video.encoders, type);
       const decoders = filterCodecsByAcceleration(codecs.video.decoders, type);
-      
+
       if (encoders.length > 0 || decoders.length > 0) {
         result.push({
           type,
           available: true,
           encoders,
-          decoders
+          decoders,
         });
       }
     }
@@ -486,20 +546,20 @@ export class FFmpeg extends EventEmitter {
    */
   async getMetadata(input: InputSource): Promise<MediaMetadata> {
     let inputInfo;
-    
+
     try {
       FFmpeg.validateFFprobePath();
-      
+
       // Prepare input (convert buffer/stream to temp file if needed)
       inputInfo = await prepareInput(input);
       const inputPath = getInputPath(inputInfo);
-      
+
       const args = this.commandBuilder.buildProbeCommand(inputPath);
       const output = execSync(`${FFmpeg.getFFprobePath()} ${args.join(' ')}`, {
         encoding: 'utf-8',
-        stdio: ['pipe', 'pipe', 'pipe']
+        stdio: ['pipe', 'pipe', 'pipe'],
       });
-      
+
       const metadata = parseMediaMetadata(output);
       return metadata;
     } catch (error) {
@@ -574,8 +634,7 @@ export class FFmpeg extends EventEmitter {
   async isVideo(input: InputSource): Promise<boolean> {
     try {
       const metadata = await this.getMetadata(input);
-      return metadata.streams.some(s => s.codecType === 'video' && 
-        (s.frameRate || s.avgFrameRate)); // Has video stream with frame rate
+      return metadata.streams.some(s => s.codecType === 'video' && (s.frameRate || s.avgFrameRate)); // Has video stream with frame rate
     } catch {
       return false;
     }
@@ -618,7 +677,7 @@ export class FFmpeg extends EventEmitter {
     targetAudioCodec?: string
   ): Promise<ConversionCompatibility> {
     const metadata = await this.getVideoMetadata(input);
-    
+
     return checkConversionCompatibility(
       metadata.videoCodec,
       metadata.audioCodec,
@@ -654,10 +713,10 @@ export class FFmpeg extends EventEmitter {
   async getRemuxableFormats(input: InputSource): Promise<string[]> {
     const metadata = await this.getVideoMetadata(input);
     const formats = await FFmpeg.getFormats();
-    
+
     const videoCodec = metadata.videoCodec;
     const videoCompatible = CODEC_CONTAINER_COMPATIBILITY[videoCodec] || [];
-    
+
     // Return only formats that are available in FFmpeg
     return videoCompatible.filter(fmt => formats.muxing.includes(fmt));
   }
@@ -672,37 +731,48 @@ export class FFmpeg extends EventEmitter {
     const engine = new ExecutionEngine(FFmpeg.ffmpegPath);
     let currentProgress: ProgressInfo | null = null;
     let isCancelled = false;
-    
+
     // Create event emitter for this specific conversion
+    const eventEmitter = new EventEmitter();
+    
     const events: ConversionEvents = {
-      start: (_command: string) => {
-        // Events are handled by the conversion result, not the main instance
+      start: (callback: (command: string) => void) => {
+        eventEmitter.on('start', callback);
       },
-      progress: (progress: ProgressInfo) => {
-        currentProgress = progress;
-        // Events are handled by the conversion result, not the main instance
+      progress: (callback: (progress: ProgressInfo) => void) => {
+        eventEmitter.on('progress', callback);
       },
-      end: () => {
-        // Events are handled by the conversion result, not the main instance
+      end: (callback: () => void) => {
+        eventEmitter.on('end', callback);
       },
-      error: (_error: Error) => {
-        // Events are handled by the conversion result, not the main instance
+      error: (callback: (error: Error) => void) => {
+        eventEmitter.on('error', callback);
       }
     };
-    
-    // Forward events from engine to events
-    engine.on('start', events.start);
-    engine.on('progress', events.progress);
-    engine.on('end', events.end);
-    engine.on('error', events.error);
-    
-    const promise = engine.execute(config).catch((error) => {
+
+    // Forward events from engine to eventEmitter
+    engine.on('start', (command: string) => {
+      currentProgress = null;
+      eventEmitter.emit('start', command);
+    });
+    engine.on('progress', (progress: ProgressInfo) => {
+      currentProgress = progress;
+      eventEmitter.emit('progress', progress);
+    });
+    engine.on('end', () => {
+      eventEmitter.emit('end');
+    });
+    engine.on('error', (error: Error) => {
+      eventEmitter.emit('error', error);
+    });
+
+    const promise = engine.execute(config).catch(error => {
       if (!isCancelled) {
-        events.error(error);
+        eventEmitter.emit('error', error);
       }
       throw error;
     });
-    
+
     return {
       promise,
       events,
@@ -710,7 +780,7 @@ export class FFmpeg extends EventEmitter {
         isCancelled = true;
         engine.cancel();
       },
-      getProgress: () => currentProgress
+      getProgress: () => currentProgress,
     };
   }
 
@@ -722,13 +792,13 @@ export class FFmpeg extends EventEmitter {
     callbacks?: ConversionCallbacks
   ): Promise<void> {
     const engine = new ExecutionEngine(FFmpeg.ffmpegPath);
-    
+
     // Forward events from engine to this instance
-    engine.on('start', (cmd) => this.emit('start', cmd));
-    engine.on('progress', (progress) => this.emit('progress', progress));
+    engine.on('start', cmd => this.emit('start', cmd));
+    engine.on('progress', progress => this.emit('progress', progress));
     engine.on('end', () => this.emit('end'));
-    engine.on('error', (error) => this.emit('error', error));
-    
+    engine.on('error', error => this.emit('error', error));
+
     return engine.execute(config, callbacks);
   }
 
@@ -739,37 +809,48 @@ export class FFmpeg extends EventEmitter {
     const engine = new ExecutionEngine(FFmpeg.ffmpegPath);
     let currentProgress: ProgressInfo | null = null;
     let isCancelled = false;
-    
+
     // Create event emitter for this specific conversion
+    const eventEmitter = new EventEmitter();
+    
     const events: ConversionEvents = {
-      start: (_command: string) => {
-        // Events are handled by the conversion result, not the main instance
+      start: (callback: (command: string) => void) => {
+        eventEmitter.on('start', callback);
       },
-      progress: (progress: ProgressInfo) => {
-        currentProgress = progress;
-        // Events are handled by the conversion result, not the main instance
+      progress: (callback: (progress: ProgressInfo) => void) => {
+        eventEmitter.on('progress', callback);
       },
-      end: () => {
-        // Events are handled by the conversion result, not the main instance
+      end: (callback: () => void) => {
+        eventEmitter.on('end', callback);
       },
-      error: (_error: Error) => {
-        // Events are handled by the conversion result, not the main instance
+      error: (callback: (error: Error) => void) => {
+        eventEmitter.on('error', callback);
       }
     };
-    
-    // Forward events from engine to events
-    engine.on('start', events.start);
-    engine.on('progress', events.progress);
-    engine.on('end', events.end);
-    engine.on('error', events.error);
-    
-    const promise = engine.executeToBuffer(config).catch((error) => {
+
+    // Forward events from engine to eventEmitter
+    engine.on('start', (command: string) => {
+      currentProgress = null;
+      eventEmitter.emit('start', command);
+    });
+    engine.on('progress', (progress: ProgressInfo) => {
+      currentProgress = progress;
+      eventEmitter.emit('progress', progress);
+    });
+    engine.on('end', () => {
+      eventEmitter.emit('end');
+    });
+    engine.on('error', (error: Error) => {
+      eventEmitter.emit('error', error);
+    });
+
+    const promise = engine.executeToBuffer(config).catch(error => {
       if (!isCancelled) {
-        events.error(error);
+        eventEmitter.emit('error', error);
       }
       throw error;
     });
-    
+
     return {
       promise,
       events,
@@ -777,7 +858,7 @@ export class FFmpeg extends EventEmitter {
         isCancelled = true;
         engine.cancel();
       },
-      getProgress: () => currentProgress
+      getProgress: () => currentProgress,
     };
   }
 
@@ -789,13 +870,13 @@ export class FFmpeg extends EventEmitter {
     callbacks?: ConversionCallbacks
   ): Promise<Buffer> {
     const engine = new ExecutionEngine(FFmpeg.ffmpegPath);
-    
+
     // Forward events
-    engine.on('start', (cmd) => this.emit('start', cmd));
-    engine.on('progress', (progress) => this.emit('progress', progress));
+    engine.on('start', cmd => this.emit('start', cmd));
+    engine.on('progress', progress => this.emit('progress', progress));
     engine.on('end', () => this.emit('end'));
-    engine.on('error', (error) => this.emit('error', error));
-    
+    engine.on('error', error => this.emit('error', error));
+
     return engine.executeToBuffer(config, callbacks);
   }
 
@@ -900,4 +981,3 @@ export class FFmpeg extends EventEmitter {
     return handler.sideBySide(config);
   }
 }
-

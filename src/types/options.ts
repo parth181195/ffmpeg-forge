@@ -15,4 +15,3 @@ export interface FFmpegOptions {
   noAudio?: boolean;
   noVideo?: boolean;
 }
-

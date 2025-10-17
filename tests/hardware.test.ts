@@ -1,5 +1,10 @@
 import { describe, it, expect } from 'vitest';
-import { isGPUCodec, isCPUCodec, detectHardwareType, filterCodecsByAcceleration } from '../src/utils/hardware-detection';
+import {
+  isGPUCodec,
+  isCPUCodec,
+  detectHardwareType,
+  filterCodecsByAcceleration,
+} from '../src/utils/hardware-detection';
 
 describe('Hardware Detection', () => {
   describe('isGPUCodec', () => {
@@ -61,14 +66,7 @@ describe('Hardware Detection', () => {
   });
 
   describe('filterCodecsByAcceleration', () => {
-    const testCodecs = [
-      'libx264',
-      'libx265',
-      'h264_nvenc',
-      'hevc_nvenc',
-      'h264_qsv',
-      'h264_vaapi',
-    ];
+    const testCodecs = ['libx264', 'libx265', 'h264_nvenc', 'hevc_nvenc', 'h264_qsv', 'h264_vaapi'];
 
     it('should return all codecs for "any"', () => {
       const result = filterCodecsByAcceleration(testCodecs, 'any');
@@ -105,4 +103,3 @@ describe('Hardware Detection', () => {
     });
   });
 });
-

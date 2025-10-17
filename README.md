@@ -29,10 +29,12 @@ npm install ffmpeg-forge
 ```
 
 **Requirements:**
+
 - Node.js 16+
 - FFmpeg 4.0+ installed on your system ([installation guide](https://ffmpeg.org/download.html))
 
 **Tested On:**
+
 - FFmpeg: 7.1.1
 - Node.js: 18+
 - Platforms: Linux, macOS (should work on Windows)
@@ -99,11 +101,11 @@ await ffmpeg.convert({
   input: 'input.mp4',
   output: 'output.mp4',
   video: {
-    codec: VideoCodec.H264,  // Automatically uses h264_nvenc if available
+    codec: VideoCodec.H264, // Automatically uses h264_nvenc if available
   },
   hardwareAcceleration: {
     enabled: true,
-    preferredType: 'auto',  // or 'nvidia', 'intel', 'amd'
+    preferredType: 'auto', // or 'nvidia', 'intel', 'amd'
   },
 });
 
@@ -146,7 +148,7 @@ await ffmpeg.convert({
 await ffmpeg.extractScreenshot({
   input: 'video.mp4',
   output: 'screenshot.jpg',
-  time: 10,  // 10 seconds
+  time: 10, // 10 seconds
   size: '1920x1080',
 });
 
@@ -155,7 +157,7 @@ const result = await ffmpeg.extractScreenshots({
   input: 'video.mp4',
   folder: 'screenshots',
   filename: 'frame-%i.jpg',
-  count: 5,  // 5 evenly spaced screenshots
+  count: 5, // 5 evenly spaced screenshots
 });
 ```
 
@@ -166,7 +168,7 @@ const result = await ffmpeg.extractScreenshots({
 const thumbnails = await ffmpeg.extractThumbnails({
   input: 'video.mp4',
   output: 'thumbnails/thumb-%d.jpg',
-  strategy: 'interval',  // 'time', 'count', 'interval', 'scene', or 'quality'
+  strategy: 'interval', // 'time', 'count', 'interval', 'scene', or 'quality'
   count: 10,
   size: '320x180',
 });
@@ -209,9 +211,9 @@ await ffmpeg.concatenate({
 const trailer = await ffmpeg.generateTrailer({
   input: 'movie.mp4',
   output: 'trailer.mp4',
-  strategy: 'segments',  // 'segments', 'duration', 'scenes', or 'highlights'
-  maxDuration: 30,  // 30 seconds max
-  segmentCount: 5,   // Extract 5 segments
+  strategy: 'segments', // 'segments', 'duration', 'scenes', or 'highlights'
+  maxDuration: 30, // 30 seconds max
+  segmentCount: 5, // Extract 5 segments
 });
 ```
 
@@ -231,7 +233,7 @@ await ffmpeg.convertBatchParallel(
     { input: 'video2.mp4', output: 'output2.mp4', video: { codec: VideoCodec.H264 } },
   ],
   {
-    concurrency: 3,  // Process 3 at a time
+    concurrency: 3, // Process 3 at a time
     onProgress: (file, progress) => {
       console.log(`${file}: ${progress.percent}%`);
     },
@@ -289,7 +291,7 @@ import { presets } from 'ffmpeg-forge';
 await ffmpeg.convert({
   input: 'input.mp4',
   output: 'output.mp4',
-  ...presets.youtube,  // Pre-configured settings
+  ...presets.youtube, // Pre-configured settings
 });
 
 // Available presets:
@@ -331,6 +333,7 @@ await ffmpeg.merge({
 ## Available Filters
 
 ### Video Filters (12)
+
 - **scale** - Resize with 10 algorithms (Lanczos, Bicubic, etc.)
 - **crop** - Position-aware cropping
 - **pad** - Letterboxing/pillarboxing
@@ -345,6 +348,7 @@ await ffmpeg.merge({
 - **custom** - Any FFmpeg filter string
 
 ### Audio Filters (5)
+
 - **volume** - Volume control
 - **denoise** - Audio noise reduction
 - **equalizer** - Multi-band EQ
@@ -370,16 +374,16 @@ Supports 6 hardware acceleration platforms:
 
 > **Note:** This package was created as a modern alternative to fluent-ffmpeg, which is no longer actively maintained.
 
-| Feature | fluent-ffmpeg | ffmpeg-forge |
-|---------|--------------|----------------|
-| TypeScript | Type definitions | Native |
-| Dependencies | 3 packages | 0 |
-| Bundle Size | ~45KB gzipped | 25.5KB gzipped |
-| Hardware Acceleration | No | Yes (6 platforms) |
-| Batch Processing | No | Yes (sequential & parallel) |
-| Configuration API | Chaining | Config objects |
-| Presets | No | 15 built-in |
-| Status | Deprecated | Active |
+| Feature               | fluent-ffmpeg    | ffmpeg-forge                |
+| --------------------- | ---------------- | --------------------------- |
+| TypeScript            | Type definitions | Native                      |
+| Dependencies          | 3 packages       | 0                           |
+| Bundle Size           | ~45KB gzipped    | 25.5KB gzipped              |
+| Hardware Acceleration | No               | Yes (6 platforms)           |
+| Batch Processing      | No               | Yes (sequential & parallel) |
+| Configuration API     | Chaining         | Config objects              |
+| Presets               | No               | 15 built-in                 |
+| Status                | Deprecated       | Active                      |
 
 **Note:** Both packages are wrappers around FFmpeg. This package focuses on TypeScript support and modern API design.
 
@@ -461,11 +465,13 @@ MIT © [Parth Jansari](https://github.com/parth181195)
 This package has been tested on the following configuration:
 
 **Software:**
+
 - FFmpeg: 7.1.1
 - Node.js: 18+
 - Operating System: Ubuntu 25.04 (Linux kernel 6.14)
 
 **Hardware:**
+
 - CPU: AMD Ryzen 5 5600X (6-Core, 12 threads)
 - GPU: NVIDIA GeForce RTX 4070 (12GB VRAM, Driver 580.65)
 - RAM: 60GB
@@ -479,6 +485,7 @@ This package was inspired by [fluent-ffmpeg](https://github.com/fluent-ffmpeg/no
 This is a TypeScript wrapper around [FFmpeg](https://ffmpeg.org/), the powerful multimedia framework that does all the heavy lifting.
 
 Built with:
+
 - [TypeScript](https://www.typescriptlang.org/)
 - [Vitest](https://vitest.dev/)
 - Node.js built-in modules

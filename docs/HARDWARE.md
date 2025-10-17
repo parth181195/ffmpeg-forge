@@ -6,14 +6,14 @@ Hardware acceleration can dramatically speed up video encoding by offloading wor
 
 ## Supported Hardware
 
-| Platform | Type | Codecs | API |
-|----------|------|--------|-----|
-| **NVIDIA** | GPU | H.264, H.265, AV1 | NVENC (CUDA) |
-| **Intel** | iGPU/dGPU | H.264, H.265, AV1, VP9 | Quick Sync (QSV) |
-| **AMD** | GPU | H.264, H.265 | AMF |
-| **Linux** | Any | H.264, H.265, VP8, VP9, AV1 | VAAPI |
-| **macOS** | Apple Silicon | H.264, H.265 | VideoToolbox |
-| **Linux** | ARM | H.264 | V4L2 |
+| Platform   | Type          | Codecs                      | API              |
+| ---------- | ------------- | --------------------------- | ---------------- |
+| **NVIDIA** | GPU           | H.264, H.265, AV1           | NVENC (CUDA)     |
+| **Intel**  | iGPU/dGPU     | H.264, H.265, AV1, VP9      | Quick Sync (QSV) |
+| **AMD**    | GPU           | H.264, H.265                | AMF              |
+| **Linux**  | Any           | H.264, H.265, VP8, VP9, AV1 | VAAPI            |
+| **macOS**  | Apple Silicon | H.264, H.265                | VideoToolbox     |
+| **Linux**  | ARM           | H.264                       | V4L2             |
 
 ---
 
@@ -26,11 +26,11 @@ import { detectHardwareAcceleration, getHardwareAccelerationInfo } from 'node-ff
 
 // Simple detection
 const available = detectHardwareAcceleration();
-console.log('Available:', available);  // ['nvidia', 'vaapi', 'intel']
+console.log('Available:', available); // ['nvidia', 'vaapi', 'intel']
 
 // Detailed info
 const info = getHardwareAccelerationInfo();
-console.log('Best:', info.best);  // 'nvidia'
+console.log('Best:', info.best); // 'nvidia'
 console.log('Capabilities:', info.capabilities);
 // {
 //   nvidia: ['h264_nvenc', 'hevc_nvenc', 'av1_nvenc'],
@@ -61,18 +61,19 @@ await ffmpeg.convert({
   input: 'input.mp4',
   output: 'output.mp4',
   video: {
-    codec: VideoCodec.H264,  // Will auto-upgrade to h264_nvenc if NVIDIA available
+    codec: VideoCodec.H264, // Will auto-upgrade to h264_nvenc if NVIDIA available
     bitrate: '5M',
   },
   hardwareAcceleration: {
-    enabled: true,           // Enable hardware acceleration
-    preferHardware: true,    // Prefer GPU over CPU (default: true)
-    fallbackToCPU: true,     // Fallback to CPU if GPU fails (default: true)
+    enabled: true, // Enable hardware acceleration
+    preferHardware: true, // Prefer GPU over CPU (default: true)
+    fallbackToCPU: true, // Fallback to CPU if GPU fails (default: true)
   },
 });
 ```
 
 **What happens:**
+
 1. Detects best available hardware (e.g., NVIDIA)
 2. Converts `libx264` → `h264_nvenc` automatically
 3. Adds `-hwaccel cuda` flag
@@ -93,7 +94,7 @@ await ffmpeg.convert({
   },
   hardwareAcceleration: {
     enabled: true,
-    type: HardwareAcceleration.NVIDIA,  // Force NVIDIA
+    type: HardwareAcceleration.NVIDIA, // Force NVIDIA
   },
 });
 ```
@@ -109,7 +110,7 @@ await ffmpeg.convert({
   input: 'input.mp4',
   output: 'output.mp4',
   video: {
-    codec: VideoCodec.H264_NVENC,  // Explicit NVENC codec
+    codec: VideoCodec.H264_NVENC, // Explicit NVENC codec
     bitrate: '5M',
   },
   hardwareAcceleration: HardwareAcceleration.NVIDIA,
@@ -129,7 +130,7 @@ await ffmpeg.convert({
   video: {
     codec: VideoCodec.H264,
   },
-  hardwareAcceleration: 'nvidia',  // Simple string
+  hardwareAcceleration: 'nvidia', // Simple string
 });
 ```
 
@@ -147,7 +148,7 @@ await ffmpeg.convert({
   video: {
     codec: VideoCodec.H264_NVENC,
     bitrate: '5M',
-    preset: 'p4',  // NVENC presets: p1-p7 (p1=fastest, p7=slowest)
+    preset: 'p4', // NVENC presets: p1-p7 (p1=fastest, p7=slowest)
   },
   hardwareAcceleration: HardwareAcceleration.NVIDIA,
 });
@@ -158,8 +159,8 @@ await ffmpeg.convert({
   output: 'output.mp4',
   video: {
     codec: VideoCodec.HEVC_NVENC,
-    bitrate: '3M',  // Lower bitrate with same quality
-    preset: 'p5',   // Slower = better quality
+    bitrate: '3M', // Lower bitrate with same quality
+    preset: 'p5', // Slower = better quality
   },
   hardwareAcceleration: HardwareAcceleration.NVIDIA,
 });
@@ -170,7 +171,7 @@ await ffmpeg.convert({
   output: 'output.mp4',
   video: {
     codec: VideoCodec.AV1_NVENC,
-    bitrate: '2M',  // Even lower bitrate!
+    bitrate: '2M', // Even lower bitrate!
   },
   hardwareAcceleration: HardwareAcceleration.NVIDIA,
 });
@@ -244,9 +245,9 @@ import { autoSelectHardwareEncoding, VideoCodec } from 'node-ffmpeg-ts';
 const selection = autoSelectHardwareEncoding(VideoCodec.H264);
 
 if (selection.isHardware) {
-  console.log(`Use: ${selection.codec}`);           // 'h264_nvenc'
-  console.log(`Acceleration: ${selection.acceleration}`);  // 'nvidia'
-  console.log(`FFmpeg flag: ${selection.ffmpegHwaccel}`);  // 'cuda'
+  console.log(`Use: ${selection.codec}`); // 'h264_nvenc'
+  console.log(`Acceleration: ${selection.acceleration}`); // 'nvidia'
+  console.log(`FFmpeg flag: ${selection.ffmpegHwaccel}`); // 'cuda'
 } else {
   console.log(`No hardware available, use: ${selection.codec}`);
 }
@@ -279,7 +280,7 @@ await ffmpeg.convert({
   output: 'youtube.mp4',
   ...Presets.youtube.config,
   hardwareAcceleration: {
-    enabled: true,  // Auto-detect best GPU
+    enabled: true, // Auto-detect best GPU
   },
 });
 ```
@@ -316,6 +317,7 @@ console.log(`Speedup: ${(cpuTime / gpuTime).toFixed(2)}x faster with GPU`);
 ### Hardware vs CPU Quality
 
 **Hardware Encoding:**
+
 - ✅ **Much faster** (2-10x depending on GPU)
 - ✅ **Lower power usage**
 - ✅ **Parallel processing**
@@ -323,6 +325,7 @@ console.log(`Speedup: ${(cpuTime / gpuTime).toFixed(2)}x faster with GPU`);
 - ⚠️ **Fewer tuning options**
 
 **CPU Encoding:**
+
 - ✅ **Higher quality** at same bitrate
 - ✅ **More presets** and fine-tuning
 - ✅ **Better compression** (smaller files)
@@ -332,6 +335,7 @@ console.log(`Speedup: ${(cpuTime / gpuTime).toFixed(2)}x faster with GPU`);
 ### When to Use Each
 
 **Use Hardware (GPU) When:**
+
 - Real-time encoding needed
 - Batch processing many files
 - Energy efficiency matters
@@ -339,6 +343,7 @@ console.log(`Speedup: ${(cpuTime / gpuTime).toFixed(2)}x faster with GPU`);
 - Streaming/live encoding
 
 **Use CPU When:**
+
 - Archival quality needed
 - File size minimization critical
 - Time is not a constraint
@@ -350,13 +355,13 @@ console.log(`Speedup: ${(cpuTime / gpuTime).toFixed(2)}x faster with GPU`);
 
 The package automatically maps CPU codecs to GPU equivalents:
 
-| CPU Codec | NVIDIA | Intel | AMD | VAAPI | VideoToolbox |
-|-----------|--------|-------|-----|-------|--------------|
-| H.264 | h264_nvenc | h264_qsv | h264_amf | h264_vaapi | h264_videotoolbox |
-| H.265 | hevc_nvenc | hevc_qsv | hevc_amf | hevc_vaapi | hevc_videotoolbox |
-| VP8 | - | - | - | vp8_vaapi | - |
-| VP9 | - | vp9_qsv | - | vp9_vaapi | - |
-| AV1 | av1_nvenc | av1_qsv | - | av1_vaapi | - |
+| CPU Codec | NVIDIA     | Intel    | AMD      | VAAPI      | VideoToolbox      |
+| --------- | ---------- | -------- | -------- | ---------- | ----------------- |
+| H.264     | h264_nvenc | h264_qsv | h264_amf | h264_vaapi | h264_videotoolbox |
+| H.265     | hevc_nvenc | hevc_qsv | hevc_amf | hevc_vaapi | hevc_videotoolbox |
+| VP8       | -          | -        | -        | vp8_vaapi  | -                 |
+| VP9       | -          | vp9_qsv  | -        | vp9_vaapi  | -                 |
+| AV1       | av1_nvenc  | av1_qsv  | -        | av1_vaapi  | -                 |
 
 ---
 
@@ -408,7 +413,7 @@ await ffmpeg.convert({
   input: 'hd-video.mp4',
   output: '4k-video.mp4',
   video: {
-    codec: VideoCodec.H265,  // Auto-upgrades to hevc_nvenc
+    codec: VideoCodec.H265, // Auto-upgrades to hevc_nvenc
     upscale: {
       algorithm: ScalingAlgorithm.LANCZOS,
       targetWidth: 3840,
@@ -435,7 +440,7 @@ const configs = [
 }));
 
 // Process all with GPU in parallel
-await ffmpeg.convertBatchParallel(configs, 3);  // 3 concurrent
+await ffmpeg.convertBatchParallel(configs, 3); // 3 concurrent
 ```
 
 ### Example 3: Real-time Streaming
@@ -469,11 +474,13 @@ Speedup:           0.62x (slower for short videos!)
 ```
 
 **Why GPU seems slower for short videos?**
+
 - GPU initialization overhead (~0.3-0.5s)
 - Memory transfer overhead
 - Only worth it for longer videos or batch processing
 
 **For longer videos (5+ minutes):**
+
 - GPU can be 2-5x faster
 - Significant power savings
 - Better for batch processing
@@ -483,21 +490,27 @@ Speedup:           0.62x (slower for short videos!)
 ## API Reference
 
 ### detectHardwareAcceleration()
+
 Returns array of available hardware acceleration types.
 
 ### getHardwareAccelerationInfo()
+
 Returns detailed info about capabilities.
 
 ### autoSelectHardwareEncoding(codec)
+
 Auto-selects best hardware codec for desired CPU codec.
 
 ### getBestHardwareAcceleration()
+
 Returns best available hardware (priority: NVIDIA > Intel > AMD > VAAPI > VideoToolbox).
 
 ### isHardwareAccelerationAvailable(type)
+
 Check if specific hardware type is available.
 
 ### getHardwareCodec(cpuCodec, hwType)
+
 Get hardware equivalent of CPU codec.
 
 ---
@@ -509,9 +522,9 @@ npm run example:hardware
 ```
 
 This will:
+
 1. Detect your hardware
 2. Show available codecs
 3. Benchmark CPU vs GPU
 4. Test different hardware types
 5. Show hardware-aware recommendations
-

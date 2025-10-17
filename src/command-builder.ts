@@ -10,11 +10,11 @@ export class CommandBuilder {
     if (options.overwrite) {
       this.args.push('-y');
     }
-    
+
     if (options.hideOutput) {
       this.args.push('-hide_banner', '-loglevel', 'error');
     }
-    
+
     return this;
   }
 
@@ -225,14 +225,8 @@ export class CommandBuilder {
    */
   buildProbeCommand(inputPath: string): string[] {
     this.reset();
-    
-    return [
-      '-v', 'quiet',
-      '-print_format', 'json',
-      '-show_format',
-      '-show_streams',
-      inputPath
-    ];
+
+    return ['-v', 'quiet', '-print_format', 'json', '-show_format', '-show_streams', inputPath];
   }
 
   /**
@@ -257,4 +251,3 @@ export class CommandBuilder {
     return `${executable} ${this.args.join(' ')}`;
   }
 }
-
