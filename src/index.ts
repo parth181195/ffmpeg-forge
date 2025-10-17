@@ -2,7 +2,7 @@ export { FFmpeg } from './ffmpeg';
 export type { FFmpegConstructorOptions } from './ffmpeg';
 export * from './types';
 export * from './errors';
-export * from './presets';
+export { presets, Presets, getPreset, listPresets } from './presets';
 
 // Export hardware acceleration utilities
 export {
