@@ -9,6 +9,7 @@ export default defineConfig({
   themeConfig: {
     nav: [
       { text: 'Guide', link: '/guide/getting-started' },
+      { text: 'API Reference', link: '/api/' },
       { text: 'Examples', link: '/guide/quick-start' },
       {
         text: `v${pkg.version}`,
@@ -39,6 +40,14 @@ export default defineConfig({
             { text: 'Filters', link: '/FILTERS' },
             { text: 'Hardware Acceleration', link: '/HARDWARE' },
             { text: 'Thumbnails & Trailers', link: '/THUMBNAILS_TRAILERS' },
+          ],
+        },
+      ],
+      '/api/': [
+        {
+          text: 'API Reference',
+          items: [
+            { text: 'Overview', link: '/api/' },
           ],
         },
       ],
