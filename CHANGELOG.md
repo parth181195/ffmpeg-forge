@@ -6,6 +6,7 @@ All notable changes to this project will be documented in this file.
 
 ### Added
 - Initial release
+- Modern TypeScript alternative to fluent-ffmpeg (which is deprecated)
 - 80 features for video/audio processing
 - Hardware acceleration support (6 platforms)
 - 17 filters (12 video + 5 audio)

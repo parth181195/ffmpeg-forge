@@ -361,7 +361,9 @@ Supports 6 hardware acceleration platforms:
 
 ## 📊 Comparison with fluent-ffmpeg
 
-| Feature | fluent-ffmpeg | node-ffmpeg-ts |
+> **Note:** This package was created as a modern alternative to fluent-ffmpeg, which is no longer actively maintained.
+
+| Feature | fluent-ffmpeg | ffmpeg-forge |
 |---------|--------------|----------------|
 | TypeScript | Type definitions | Native |
 | Dependencies | 3 packages | 0 |
@@ -449,9 +451,13 @@ MIT © [Parth Jansari](https://github.com/parth181195)
 
 ## 🙏 Acknowledgments
 
+This package was inspired by [fluent-ffmpeg](https://github.com/fluent-ffmpeg/node-fluent-ffmpeg), which has been the go-to FFmpeg wrapper for Node.js for many years. As fluent-ffmpeg is no longer actively maintained and has deprecated dependencies, ffmpeg-forge was created to provide a modern, type-safe alternative with zero dependencies and contemporary JavaScript/TypeScript features.
+
 This is a TypeScript wrapper around [FFmpeg](https://ffmpeg.org/), the powerful multimedia framework that does all the heavy lifting.
 
 Built with:
 - [TypeScript](https://www.typescriptlang.org/)
 - [Vitest](https://vitest.dev/)
 - Node.js built-in modules
+
+Special thanks to the fluent-ffmpeg contributors for pioneering FFmpeg wrappers in Node.js.
