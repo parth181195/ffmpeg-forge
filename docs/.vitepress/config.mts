@@ -3,6 +3,7 @@ import { defineConfig } from 'vitepress';
 export default defineConfig({
   title: 'ffmpeg-forge',
   description: 'A modern, type-safe FFmpeg wrapper for Node.js',
+  base: '/ffmpeg-forge/',
   
   themeConfig: {
     nav: [
