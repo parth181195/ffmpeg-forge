@@ -5,6 +5,7 @@ hero:
   name: ffmpeg-forge
   text: Modern FFmpeg Wrapper
   tagline: Type-safe FFmpeg for Node.js with hardware acceleration and zero dependencies
+  # GitHub Pages deployment test
   actions:
     - theme: brand
       text: Get Started
