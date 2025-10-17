@@ -9,45 +9,68 @@
    - Type checking
    - Package build
 
-2. **Publish to npm** (only if version in `package.json` changed)
-   - Publishes package to npm registry
+2. **Auto-Version Bump**
+   - Checks if current version in `package.json` already has a Git tag
+   - If tag exists: Auto-bumps patch version (e.g., 0.3.1 → 0.3.2)
+   - Updates `CHANGELOG.md` automatically
+   - Commits with `[skip ci]` to avoid infinite loops
+
+3. **Publish to npm**
+   - Publishes new version to npm registry
    - Creates Git tag
    - Creates GitHub release
 
-3. **Deploy Documentation**
-   - Builds VitePress documentation
+4. **Deploy Documentation**
+   - Builds VitePress documentation (version auto-synced from package.json)
    - Deploys to GitHub Pages
 
-### How to Release a New Version
+### Simplified Release Process
 
-1. **Update version:**
-   ```bash
-   npm run version:patch  # For bug fixes (0.1.0 -> 0.1.1)
-   npm run version:minor  # For new features (0.1.0 -> 0.2.0)
-   npm run version:major  # For breaking changes (0.1.0 -> 1.0.0)
+**Just push to main!** 🎉
+
+The workflow automatically:
+1. Detects if the current version is already released
+2. Bumps to next patch version (0.3.1 → 0.3.2)
+3. Updates CHANGELOG.md
+4. Publishes to npm
+5. Creates Git tag and GitHub release
+6. Deploys updated docs
+
+### Manual Version Bump (Optional)
+
+If you want to bump minor or major versions manually:
+
+1. **Update version in package.json:**
+   ```json
+   "version": "0.4.0"  // or "1.0.0" for major
    ```
 
-2. **Review and commit:**
-   ```bash
-   git add -A
-   git commit -m "chore: bump version to X.X.X"
-   ```
+2. **Update CHANGELOG.md:**
+   Add release notes for the new version
 
-3. **Push to trigger workflow:**
+3. **Commit and push:**
    ```bash
+   git add package.json CHANGELOG.md
+   git commit -m "chore: bump version to 0.4.0"
    git push
    ```
 
-The workflow will automatically:
-- Detect the version change
-- Publish to npm
-- Create a Git tag
-- Create a GitHub release
-- Deploy updated documentation
+The workflow will detect it's a new version and publish it!
+
+### Documentation Version
+
+The docs site version is now **automatically synced** from `package.json`. No manual update needed!
+
+Location: `docs/.vitepress/config.mts`
+```typescript
+import pkg from '../../package.json';
+// ...
+text: `v${pkg.version}`  // Auto-syncs!
+```
 
 ### Manual Trigger
 
-You can also manually trigger the workflow from GitHub:
+You can manually trigger the workflow from GitHub:
 1. Go to **Actions** tab
 2. Select **Build, Publish & Deploy**
 3. Click **Run workflow**
@@ -63,3 +86,7 @@ You can also manually trigger the workflow from GitHub:
 **GitHub Pages:**
 - Must be enabled in repository settings
 - Source: GitHub Actions
+
+### Preventing Infinite Loops
+
+The auto-version bump commits with `[skip ci]` to prevent the workflow from triggering itself again.
