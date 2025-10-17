@@ -1,4 +1,4 @@
-name: Tests
+name: CI/CD
 
 on:
   push:
@@ -9,7 +9,7 @@ on:
       - main
 
 jobs:
-  test:
+  ci:
     runs-on: ${{ matrix.os }}
     
     strategy:
@@ -27,24 +27,14 @@ jobs:
           node-version: ${{ matrix.node-version }}
           cache: 'npm'
       
-      - name: Install FFmpeg (Ubuntu)
-        if: runner.os == 'Linux'
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y ffmpeg
-      
-      - name: Install FFmpeg (macOS)
-        if: runner.os == 'macOS'
-        run: brew install ffmpeg
-      
       - name: Install dependencies
         run: npm ci
       
-      - name: Run linter
+      - name: Type check
         run: npm run type-check
       
-      - name: Run tests
-        run: npm test
+      - name: Format check
+        run: npm run format:check
       
       - name: Build package
         run: npm run build
@@ -79,4 +69,3 @@ jobs:
           files: ./coverage/coverage-final.json
           flags: unittests
           name: codecov-umbrella
-
