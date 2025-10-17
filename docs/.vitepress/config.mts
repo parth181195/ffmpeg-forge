@@ -10,7 +10,7 @@ export default defineConfig({
       { text: 'Guide', link: '/guide/getting-started' },
       { text: 'Examples', link: '/guide/quick-start' },
       {
-        text: 'v0.1.0',
+        text: 'v0.3.1',
         items: [
           {
             text: 'Changelog',
