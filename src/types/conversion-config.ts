@@ -9,6 +9,18 @@ import type {
   UpscalingOptions,
   DownscalingOptions,
 } from './filters';
+import type {
+  VideoPreset,
+  VideoProfile,
+  VideoLevel,
+  PixelFormat,
+  AACProfile,
+  AspectRatio,
+  Resolution,
+  FrameRate,
+  SampleRate,
+  AudioChannels,
+} from './enums';
 
 /**
  * Size specification for video
@@ -26,9 +38,9 @@ export interface VideoConfig {
   codec?: VideoCodecValue;
   bitrate?: string | number; // '1000k', '2M', 1000000
   quality?: number; // 0-51 for h264/h265, 0-63 for VP8/VP9
-  fps?: number; // Frames per second
-  size?: SizeSpec; // Resolution
-  aspectRatio?: string | number; // '16:9', 1.77
+  fps?: number | FrameRate; // Frames per second
+  size?: SizeSpec | Resolution; // Resolution
+  aspectRatio?: string | number | AspectRatio; // '16:9', 1.77, AspectRatio.RATIO_16_9
   disabled?: boolean; // Remove video stream (audio only)
 
   // Frame control
@@ -36,10 +48,10 @@ export interface VideoConfig {
   loop?: number; // Loop video N times (0 = infinite for GIFs)
 
   // Advanced options
-  preset?: string; // 'ultrafast', 'fast', 'medium', 'slow', 'veryslow'
-  profile?: string; // 'baseline', 'main', 'high'
-  level?: string; // '3.0', '4.0', '4.1'
-  pixelFormat?: string; // 'yuv420p', 'yuv444p'
+  preset?: string | VideoPreset; // 'ultrafast' or VideoPreset.FAST
+  profile?: string | VideoProfile; // 'baseline' or VideoProfile.MAIN
+  level?: string | VideoLevel; // '3.0' or VideoLevel.LEVEL_4_0
+  pixelFormat?: string | PixelFormat; // 'yuv420p' or PixelFormat.YUV420P
   keyframeInterval?: number; // GOP size
   bframes?: number; // B-frames count
   refs?: number; // Reference frames
@@ -57,12 +69,12 @@ export interface AudioConfig {
   codec?: AudioCodecValue;
   bitrate?: string | number; // '128k', '192k', 128000
   quality?: number; // Codec-specific quality
-  channels?: number; // 1 (mono), 2 (stereo), 6 (5.1)
-  frequency?: number; // Sample rate: 44100, 48000
+  channels?: number | AudioChannels; // 1 (mono), 2 (stereo), AudioChannels.SURROUND_5_1
+  frequency?: number | SampleRate; // 44100, 48000, SampleRate.RATE_48000
   disabled?: boolean; // Remove audio stream (video only)
 
   // Advanced options
-  profile?: string; // AAC: 'aac_low', 'aac_he'
+  profile?: string | AACProfile; // AAC: 'aac_low' or AACProfile.AAC_LOW
   volumeNormalization?: boolean; // Normalize audio volume
 
   // Filters

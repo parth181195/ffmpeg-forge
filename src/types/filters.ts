@@ -2,6 +2,8 @@
  * Video and Audio Filter Types
  */
 
+import type { Color } from './enums';
+
 // Common scaling algorithms
 export enum ScalingAlgorithm {
   FAST_BILINEAR = 'fast_bilinear',
@@ -59,7 +61,7 @@ export interface PadFilter {
   height: number | string;
   x?: number | string; // X position
   y?: number | string; // Y position
-  color?: string; // 'black', 'white', '#FF0000'
+  color?: string | Color; // 'black', Color.BLACK, '#FF0000'
 }
 
 export interface DeinterlaceFilter {
@@ -97,7 +99,7 @@ export interface ColorFilter {
 
 export interface RotateFilter {
   angle: number | string; // Angle in radians or degrees
-  fillcolor?: string; // Background color
+  fillcolor?: string | Color; // Background color: 'black', Color.BLACK, '#FF0000'
   bilinear?: boolean; // Use bilinear interpolation
 }
 
@@ -118,14 +120,14 @@ export interface TextFilter {
   text: string;
   fontfile?: string;
   fontsize?: number;
-  fontcolor?: string;
+  fontcolor?: string | Color; // Font color: 'white', Color.WHITE, '#FFFFFF'
   x?: number | string;
   y?: number | string;
-  shadowcolor?: string;
+  shadowcolor?: string | Color; // Shadow color
   shadowx?: number;
   shadowy?: number;
   borderw?: number;
-  bordercolor?: string;
+  bordercolor?: string | Color; // Border color
 }
 
 export interface FadeFilter {
