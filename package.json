@@ -66,12 +66,10 @@
   "homepage": "https://github.com/parth181195/ffmpeg-forge#readme",
   "lint-staged": {
     "*.{ts,tsx}": [
-      "npm run type-check",
-      "git add"
+      "npm run type-check"
     ],
     "*.{js,ts,tsx,json,md}": [
-      "prettier --write",
-      "git add"
+      "prettier --write"
     ]
   },
   "devDependencies": {
