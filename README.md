@@ -7,7 +7,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Test Coverage](https://img.shields.io/badge/coverage-57.6%25-yellow.svg)](./coverage)
 
-## ✨ Features
+## Features
 
 - **Type-Safe**: Full TypeScript support with comprehensive type definitions
 - **Hardware Acceleration**: Auto-detect and use GPU encoding (NVIDIA, Intel, AMD, VAAPI, VideoToolbox, V4L2)
@@ -20,7 +20,7 @@
 - **Flexible I/O**: Support for file paths, Buffers, and ReadStreams
 - **Media Extraction**: Screenshots, thumbnails, and trailer generation
 
-## 📦 Installation
+## Installation
 
 ```bash
 npm install ffmpeg-forge
@@ -35,7 +35,7 @@ npm install ffmpeg-forge
 - Node.js: 18+
 - Platforms: Linux, macOS (should work on Windows)
 
-## 🚀 Quick Start
+## Quick Start
 
 ```typescript
 import { FFmpeg, VideoCodec, AudioCodec } from 'ffmpeg-forge';
@@ -58,7 +58,7 @@ await ffmpeg.convert({
 });
 ```
 
-## 📚 Documentation
+## Documentation
 
 - **[API Reference](./docs/API.md)** - Complete API documentation
 - **[Examples](./docs/EXAMPLES.md)** - Comprehensive usage examples
@@ -66,7 +66,7 @@ await ffmpeg.convert({
 - **[Hardware Acceleration](./docs/HARDWARE.md)** - GPU encoding setup
 - **[Thumbnails & Trailers](./docs/THUMBNAILS_TRAILERS.md)** - Media extraction features
 
-## 🎯 Core Features
+## Core Features
 
 ### Video Conversion
 
@@ -326,7 +326,7 @@ await ffmpeg.merge({
 });
 ```
 
-## 🎨 Available Filters
+## Available Filters
 
 ### Video Filters (12)
 - **scale** - Resize with 10 algorithms (Lanczos, Bicubic, etc.)
@@ -351,7 +351,7 @@ await ffmpeg.merge({
 
 [See full filter documentation](./docs/FILTERS.md)
 
-## 🚀 Hardware Acceleration
+## Hardware Acceleration
 
 Supports 6 hardware acceleration platforms:
 
@@ -364,7 +364,7 @@ Supports 6 hardware acceleration platforms:
 
 [Hardware acceleration guide](./docs/HARDWARE.md)
 
-## 📊 Comparison with fluent-ffmpeg
+## Comparison with fluent-ffmpeg
 
 > **Note:** This package was created as a modern alternative to fluent-ffmpeg, which is no longer actively maintained.
 
@@ -373,15 +373,15 @@ Supports 6 hardware acceleration platforms:
 | TypeScript | Type definitions | Native |
 | Dependencies | 3 packages | 0 |
 | Bundle Size | ~45KB gzipped | 25.5KB gzipped |
-| Hardware Acceleration | ❌ | ✅ |
-| Batch Processing | ❌ | ✅ |
+| Hardware Acceleration | No | Yes (6 platforms) |
+| Batch Processing | No | Yes (sequential & parallel) |
 | Configuration API | Chaining | Config objects |
-| Presets | ❌ | ✅ 15 built-in |
+| Presets | No | 15 built-in |
 | Status | Deprecated | Active |
 
 **Note:** Both packages are wrappers around FFmpeg. This package focuses on TypeScript support and modern API design.
 
-## 🔧 Configuration
+## Configuration
 
 ### Manual FFmpeg/FFprobe Path
 
@@ -427,7 +427,7 @@ const command = ffmpeg.buildCommand({
 console.log('FFmpeg command:', command);
 ```
 
-## 🧪 Testing
+## Testing
 
 ```bash
 # Run tests
@@ -442,19 +442,19 @@ npm run example:hardware
 npm run example:thumbnails
 ```
 
-## 📝 API Reference
+## API Reference
 
 [Complete API documentation](./docs/API.md)
 
-## 🤝 Contributing
+## Contributing
 
 Contributions are welcome! Please read our contributing guidelines and submit pull requests.
 
-## 📄 License
+## License
 
 MIT © [Parth Jansari](https://github.com/parth181195)
 
-## 🧪 Tested Environment
+## Tested Environment
 
 This package has been tested on the following configuration:
 
@@ -470,7 +470,7 @@ This package has been tested on the following configuration:
 
 **Note:** The package should work on any system with FFmpeg 4.0+ and Node.js 16+. Hardware acceleration features depend on your specific GPU and drivers.
 
-## 🙏 Acknowledgments
+## Acknowledgments
 
 This package was inspired by [fluent-ffmpeg](https://github.com/fluent-ffmpeg/node-fluent-ffmpeg), which has been the go-to FFmpeg wrapper for Node.js for many years. As fluent-ffmpeg is no longer actively maintained and has deprecated dependencies, ffmpeg-forge was created to provide a modern, type-safe alternative with zero dependencies and contemporary JavaScript/TypeScript features.
 
