@@ -26,7 +26,7 @@
     "example:real": "tsx example/test-real-conversion.ts",
     "example:hardware": "tsx example/test-hardware-acceleration.ts",
     "example:thumbnails": "tsx example/test-thumbnails-trailers.ts",
-    "example:all": "tsx example/test-all-features.ts",
+    "example:events": "tsx example/event-based-conversion.ts",
     "watch": "tsx watch example/index.ts",
     "test": "vitest run",
     "test:watch": "vitest",

@@ -25,6 +25,8 @@ export type {
   ConversionRecommendation,
   ConversionConfig,
   ConversionCallbacks,
+  ConversionEvents,
+  ConversionResult,
   ProgressInfo,
   VideoConfig,
   AudioConfig,

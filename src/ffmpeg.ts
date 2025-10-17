@@ -9,7 +9,7 @@ import { HardwareAcceleration, type HardwareAccelerationValue, type HardwareAcce
 import { StreamType, type StreamTypeValue } from './types/stream';
 import type { InputSource } from './types/input';
 import type { ConversionSuggestion, ConversionCompatibility, ConversionRecommendation } from './types/conversion';
-import type { ConversionConfig, ConversionCallbacks, BatchConversionCallbacks } from './types/conversion-config';
+import type { ConversionConfig, ConversionCallbacks, BatchConversionCallbacks, ConversionResult, ConversionEvents, ProgressInfo } from './types/conversion-config';
 import { filterCodecsByAcceleration, detectHardwareType } from './utils/hardware-detection';
 import { prepareInput, cleanupInput, getInputPath } from './utils/input-handler';
 import { generateConversionSuggestions, checkConversionCompatibility, getConversionRecommendation, CODEC_CONTAINER_COMPATIBILITY } from './utils/conversion-helper';
@@ -665,7 +665,59 @@ export class FFmpeg extends EventEmitter {
   /**
    * Convert video/audio with configuration-based API
    */
-  async convert(
+  /**
+   * Convert media file with event-based progress tracking (fluent-ffmpeg style)
+   */
+  convert(config: ConversionConfig): ConversionResult {
+    const engine = new ExecutionEngine(FFmpeg.ffmpegPath);
+    let currentProgress: ProgressInfo | null = null;
+    let isCancelled = false;
+    
+    // Create event emitter for this specific conversion
+    const events: ConversionEvents = {
+      start: (command: string) => {
+        // Events are handled by the conversion result, not the main instance
+      },
+      progress: (progress: ProgressInfo) => {
+        currentProgress = progress;
+        // Events are handled by the conversion result, not the main instance
+      },
+      end: () => {
+        // Events are handled by the conversion result, not the main instance
+      },
+      error: (error: Error) => {
+        // Events are handled by the conversion result, not the main instance
+      }
+    };
+    
+    // Forward events from engine to events
+    engine.on('start', events.start);
+    engine.on('progress', events.progress);
+    engine.on('end', events.end);
+    engine.on('error', events.error);
+    
+    const promise = engine.execute(config).catch((error) => {
+      if (!isCancelled) {
+        events.error(error);
+      }
+      throw error;
+    });
+    
+    return {
+      promise,
+      events,
+      cancel: () => {
+        isCancelled = true;
+        engine.kill();
+      },
+      getProgress: () => currentProgress
+    };
+  }
+
+  /**
+   * Convert media file with callback-based progress tracking (legacy)
+   */
+  async convertWithCallbacks(
     config: ConversionConfig,
     callbacks?: ConversionCallbacks
   ): Promise<void> {
@@ -681,9 +733,58 @@ export class FFmpeg extends EventEmitter {
   }
 
   /**
-   * Convert and return output as Buffer
+   * Convert and return output as Buffer with event-based progress tracking
    */
-  async convertToBuffer(
+  convertToBuffer(config: Omit<ConversionConfig, 'output'>): ConversionResult & { promise: Promise<Buffer> } {
+    const engine = new ExecutionEngine(FFmpeg.ffmpegPath);
+    let currentProgress: ProgressInfo | null = null;
+    let isCancelled = false;
+    
+    // Create event emitter for this specific conversion
+    const events: ConversionEvents = {
+      start: (command: string) => {
+        // Events are handled by the conversion result, not the main instance
+      },
+      progress: (progress: ProgressInfo) => {
+        currentProgress = progress;
+        // Events are handled by the conversion result, not the main instance
+      },
+      end: () => {
+        // Events are handled by the conversion result, not the main instance
+      },
+      error: (error: Error) => {
+        // Events are handled by the conversion result, not the main instance
+      }
+    };
+    
+    // Forward events from engine to events
+    engine.on('start', events.start);
+    engine.on('progress', events.progress);
+    engine.on('end', events.end);
+    engine.on('error', events.error);
+    
+    const promise = engine.executeToBuffer(config).catch((error) => {
+      if (!isCancelled) {
+        events.error(error);
+      }
+      throw error;
+    });
+    
+    return {
+      promise,
+      events,
+      cancel: () => {
+        isCancelled = true;
+        engine.kill();
+      },
+      getProgress: () => currentProgress
+    };
+  }
+
+  /**
+   * Convert and return output as Buffer with callback-based progress tracking (legacy)
+   */
+  async convertToBufferWithCallbacks(
     config: Omit<ConversionConfig, 'output'>,
     callbacks?: ConversionCallbacks
   ): Promise<Buffer> {

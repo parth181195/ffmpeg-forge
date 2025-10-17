@@ -133,13 +133,23 @@ export interface ConversionConfig {
 }
 
 /**
- * Callbacks for conversion progress
+ * Callbacks for conversion progress (fluent-ffmpeg style)
  */
 export interface ConversionCallbacks {
   onStart?: (command: string) => void;
   onProgress?: (progress: ProgressInfo) => void;
   onEnd?: () => void;
   onError?: (error: Error) => void;
+}
+
+/**
+ * Event-based conversion interface (fluent-ffmpeg style)
+ */
+export interface ConversionEvents {
+  start: (command: string) => void;
+  progress: (progress: ProgressInfo) => void;
+  end: () => void;
+  error: (error: Error) => void;
 }
 
 /**
@@ -176,6 +186,31 @@ export interface BatchConversionCallbacks {
   onFileComplete?: (index: number) => void;
   onFileError?: (index: number, error: Error) => void;
   onComplete?: () => void;
+}
+
+/**
+ * Conversion result with event handling
+ */
+export interface ConversionResult {
+  /**
+   * Promise that resolves when conversion completes
+   */
+  promise: Promise<void>;
+  
+  /**
+   * Event emitter for conversion events
+   */
+  events: ConversionEvents;
+  
+  /**
+   * Cancel the conversion
+   */
+  cancel: () => void;
+  
+  /**
+   * Get current progress
+   */
+  getProgress: () => ProgressInfo | null;
 }
 
 /**
