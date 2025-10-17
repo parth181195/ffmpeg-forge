@@ -12,6 +12,9 @@ hero:
     - theme: alt
       text: View on GitHub
       link: https://github.com/parth181195/ffmpeg-forge
+    - theme: alt
+      text: Documentation
+      link: /FILTERS
 
 features:
   - icon: 📘
@@ -99,9 +102,9 @@ npm install ffmpeg-forge
 <div class="vp-doc">
 
 - [Getting Started](/guide/getting-started) - Learn the basics
-- [Hardware Acceleration](/guide/hardware) - Speed up encoding with GPU
-- [Filters Guide](/guide/filters) - Apply video and audio effects
-- [Examples](/examples/basic-conversion) - See code examples
+- [Hardware Acceleration](/HARDWARE) - Speed up encoding with GPU
+- [Filters Guide](/FILTERS) - Apply video and audio effects
+- [Quick Start](/guide/quick-start) - See code examples
 
 </div>
 

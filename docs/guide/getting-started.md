@@ -118,13 +118,12 @@ await ffmpeg.convert({
 ## Next Steps
 
 - [Quick Start Guide](/guide/quick-start) - More examples
-- [Configuration](/guide/configuration) - Learn the config API
-- [Filters](/guide/filters) - Apply video/audio effects
-- [Hardware Acceleration](/guide/hardware) - Use GPU encoding
+- [Filters Guide](/FILTERS) - Apply video/audio effects
+- [Hardware Acceleration](/HARDWARE) - Use GPU encoding
+- [Thumbnails & Trailers](/THUMBNAILS_TRAILERS) - Media extraction
 
 ## Need Help?
 
-- Check the [API Reference](/api/ffmpeg-class)
-- See [Examples](/examples/basic-conversion)
+- Check the existing guides in the docs/ folder
 - Report issues on [GitHub](https://github.com/parth181195/ffmpeg-forge/issues)
 

@@ -196,8 +196,8 @@ await ffmpeg.convertBatchParallel(
 
 ## Next Steps
 
-- [Configuration API](/guide/configuration) - Learn about config options
-- [Filters Guide](/guide/filters) - Explore all available filters
-- [Hardware Acceleration](/guide/hardware) - Speed up encoding
-- [API Reference](/api/ffmpeg-class) - Complete API documentation
+- [Getting Started](/guide/getting-started) - Introduction
+- [Filters Guide](/FILTERS) - Explore all available filters
+- [Hardware Acceleration](/HARDWARE) - Speed up encoding
+- [Thumbnails & Trailers](/THUMBNAILS_TRAILERS) - Media extraction
 

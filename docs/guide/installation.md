@@ -147,6 +147,6 @@ console.log('Types:', hwInfo.types);
 ## Next Steps
 
 - [Quick Start](/guide/quick-start) - Common use cases
-- [Configuration](/guide/configuration) - Learn the config API
-- [Examples](/examples/basic-conversion) - Code examples
+- [Filters Guide](/FILTERS) - Apply video and audio effects
+- [Hardware Acceleration](/HARDWARE) - GPU encoding setup
 
