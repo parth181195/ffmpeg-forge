@@ -37,42 +37,62 @@ jobs:
       - name: Build package
         run: npm run build
 
-      - name: Check version changed
-        id: version-check
+      - name: Auto-bump patch version
+        id: version-bump
         run: |
           git fetch --tags
           CURRENT_VERSION=$(node -p "require('./package.json').version")
+          
+          # Check if version tag already exists
           if git rev-parse "v$CURRENT_VERSION" >/dev/null 2>&1; then
-            echo "version_changed=false" >> $GITHUB_OUTPUT
-            echo "Version v$CURRENT_VERSION already exists"
-          else
+            # Version exists, bump patch
+            echo "Version v$CURRENT_VERSION already exists, auto-bumping patch..."
+            npm version patch --no-git-tag-version
+            NEW_VERSION=$(node -p "require('./package.json').version")
             echo "version_changed=true" >> $GITHUB_OUTPUT
+            echo "new_version=$NEW_VERSION" >> $GITHUB_OUTPUT
+            echo "Bumped to v$NEW_VERSION"
+            
+            # Update CHANGELOG
+            DATE=$(date +%Y-%m-%d)
+            sed -i "4i\\\\n## [$NEW_VERSION] - $DATE\\\n\\\n### Changed\\\n\\\n- Auto-bump patch version on push to main\\\n" CHANGELOG.md
+            
+            # Commit version bump
+            git config user.name "GitHub Actions"
+            git config user.email "actions@github.com"
+            git add package.json CHANGELOG.md
+            git commit -m "chore: auto-bump version to $NEW_VERSION [skip ci]"
+            git push
+          else
+            # Version is new, use it as-is
+            echo "version_changed=true" >> $GITHUB_OUTPUT
+            echo "new_version=$CURRENT_VERSION" >> $GITHUB_OUTPUT
             echo "New version v$CURRENT_VERSION detected"
           fi
 
       - name: Publish to npm
-        if: steps.version-check.outputs.version_changed == 'true'
+        if: steps.version-bump.outputs.version_changed == 'true'
         run: npm publish
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       - name: Create Git tag
-        if: steps.version-check.outputs.version_changed == 'true'
+        if: steps.version-bump.outputs.version_changed == 'true'
         run: |
-          CURRENT_VERSION=$(node -p "require('./package.json').version")
+          NEW_VERSION="${{ steps.version-bump.outputs.new_version }}"
           git config user.name "GitHub Actions"
           git config user.email "actions@github.com"
-          git tag -a "v$CURRENT_VERSION" -m "Release v$CURRENT_VERSION"
-          git push origin "v$CURRENT_VERSION"
+          git tag -a "v$NEW_VERSION" -m "Release v$NEW_VERSION"
+          git push origin "v$NEW_VERSION"
 
       - name: Create GitHub Release
-        if: steps.version-check.outputs.version_changed == 'true'
+        if: steps.version-bump.outputs.version_changed == 'true'
         uses: actions/create-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: v${{ steps.version-check.outputs.CURRENT_VERSION }}
-          release_name: Release v${{ steps.version-check.outputs.CURRENT_VERSION }}
+          tag_name: v${{ steps.version-bump.outputs.new_version }}
+          release_name: Release v${{ steps.version-bump.outputs.new_version }}
           body: |
             See [CHANGELOG.md](https://github.com/parth181195/ffmpeg-forge/blob/main/CHANGELOG.md) for details.
           draft: false

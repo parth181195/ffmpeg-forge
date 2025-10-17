@@ -1,4 +1,5 @@
 import { defineConfig } from 'vitepress';
+import pkg from '../../package.json';
 
 export default defineConfig({
   title: 'ffmpeg-forge',
@@ -10,7 +11,7 @@ export default defineConfig({
       { text: 'Guide', link: '/guide/getting-started' },
       { text: 'Examples', link: '/guide/quick-start' },
       {
-        text: 'v0.3.1',
+        text: `v${pkg.version}`,
         items: [
           {
             text: 'Changelog',
