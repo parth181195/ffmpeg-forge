@@ -1,34 +1,81 @@
 import type { ConversionConfig } from '../types/conversion-config';
 import { VideoCodec, AudioCodec } from '../types/codecs';
 import { OutputFormat } from '../types/formats';
-import { ScalingAlgorithm } from '../types/filters';
 
 /**
  * Preset configurations for common use cases
+ * Usage: import { presets } from 'ffmpeg-forge';
+ *        ffmpeg.convert({ ...presets.youtube.hd1080, input: 'in.mp4', output: 'out.mp4' })
  */
-export const Presets = {
+export const presets = {
   /**
-   * YouTube upload optimization
+   * Web-optimized presets
    */
-  youtube: {
-    name: 'YouTube Upload',
-    description: 'Optimized for YouTube with high quality H.264',
-    config: {
+  web: {
+    /** 1080p HD for web streaming */
+    hd: {
       format: OutputFormat.MP4,
       video: {
         codec: VideoCodec.H264,
+        size: '1920x1080',
+        bitrate: '5M',
+        preset: 'medium',
+        profile: 'high',
+      },
+      audio: {
+        codec: AudioCodec.AAC,
+        bitrate: '128k',
+      },
+    } as Partial<ConversionConfig>,
+
+    /** 720p SD for web */
+    sd: {
+      format: OutputFormat.MP4,
+      video: {
+        codec: VideoCodec.H264,
+        size: '1280x720',
+        bitrate: '3M',
+        preset: 'medium',
+      },
+      audio: {
+        codec: AudioCodec.AAC,
+        bitrate: '96k',
+      },
+    } as Partial<ConversionConfig>,
+
+    /** Mobile optimized */
+    mobile: {
+      format: OutputFormat.MP4,
+      video: {
+        codec: VideoCodec.H264,
+        size: '854x480',
+        bitrate: '1.5M',
+        preset: 'medium',
+        profile: 'baseline',
+      },
+      audio: {
+        codec: AudioCodec.AAC,
+        bitrate: '64k',
+      },
+    } as Partial<ConversionConfig>,
+  },
+
+  /**
+   * YouTube upload presets
+   */
+  youtube: {
+    /** 1080p HD for YouTube */
+    hd1080: {
+      format: OutputFormat.MP4,
+      video: {
+        codec: VideoCodec.H264,
+        size: '1920x1080',
         bitrate: '8M',
         preset: 'slow',
         profile: 'high',
         level: '4.2',
         pixelFormat: 'yuv420p',
         fps: 30,
-        filters: {
-          color: {
-            contrast: 1.1,
-            saturation: 1.05,
-          },
-        },
       },
       audio: {
         codec: AudioCodec.AAC,
@@ -37,175 +84,160 @@ export const Presets = {
         frequency: 48000,
       },
     } as Partial<ConversionConfig>,
+
+    /** 720p HD for YouTube */
+    hd720: {
+      format: OutputFormat.MP4,
+      video: {
+        codec: VideoCodec.H264,
+        size: '1280x720',
+        bitrate: '5M',
+        preset: 'medium',
+        profile: 'high',
+        level: '4.0',
+        fps: 30,
+      },
+      audio: {
+        codec: AudioCodec.AAC,
+        bitrate: '128k',
+        frequency: 48000,
+      },
+    } as Partial<ConversionConfig>,
+
+    /** 4K UHD for YouTube */
+    uhd4k: {
+      format: OutputFormat.MP4,
+      video: {
+        codec: VideoCodec.H264,
+        size: '3840x2160',
+        bitrate: '45M',
+        preset: 'slow',
+        profile: 'high',
+        level: '5.2',
+        fps: 30,
+      },
+      audio: {
+        codec: AudioCodec.AAC,
+        bitrate: '192k',
+        frequency: 48000,
+      },
+    } as Partial<ConversionConfig>,
   },
 
   /**
-   * Instagram post (1:1 square)
+   * Instagram presets
    */
-  instagramPost: {
-    name: 'Instagram Post',
-    description: 'Square 1080x1080 for Instagram feed',
-    config: {
+  instagram: {
+    /** Square feed post (1:1) */
+    feed: {
       format: OutputFormat.MP4,
       video: {
         codec: VideoCodec.H264,
         size: '1080x1080',
         bitrate: '5M',
         preset: 'medium',
-        filters: {
-          scale: {
-            width: 1080,
-            height: 1080,
-            algorithm: ScalingAlgorithm.LANCZOS,
-          },
-        },
+        fps: 30,
       },
       audio: {
         codec: AudioCodec.AAC,
         bitrate: '128k',
       },
-      timing: {
-        duration: 60, // Max 60 seconds
-      },
     } as Partial<ConversionConfig>,
-  },
 
-  /**
-   * Instagram Story (9:16 portrait)
-   */
-  instagramStory: {
-    name: 'Instagram Story',
-    description: 'Portrait 1080x1920 for Instagram stories',
-    config: {
+    /** Vertical story (9:16) */
+    story: {
       format: OutputFormat.MP4,
       video: {
         codec: VideoCodec.H264,
         size: '1080x1920',
         bitrate: '4M',
         preset: 'medium',
-        filters: {
-          scale: {
-            width: 1080,
-            height: 1920,
-            algorithm: ScalingAlgorithm.LANCZOS,
-          },
-        },
+        fps: 30,
       },
       audio: {
         codec: AudioCodec.AAC,
         bitrate: '128k',
       },
-      timing: {
-        duration: 15, // Max 15 seconds
-      },
     } as Partial<ConversionConfig>,
   },
 
   /**
-   * TikTok optimization
+   * TikTok preset (vertical video)
    */
   tiktok: {
-    name: 'TikTok',
-    description: 'Optimized for TikTok upload',
-    config: {
-      format: OutputFormat.MP4,
-      video: {
-        codec: VideoCodec.H264,
-        size: '1080x1920',
-        bitrate: '6M',
-        fps: 30,
-        preset: 'medium',
-      },
-      audio: {
-        codec: AudioCodec.AAC,
-        bitrate: '192k',
-        frequency: 44100,
-      },
-      timing: {
-        duration: 60,
-      },
-    } as Partial<ConversionConfig>,
-  },
+    format: OutputFormat.MP4,
+    video: {
+      codec: VideoCodec.H264,
+      size: '1080x1920',
+      bitrate: '6M',
+      preset: 'medium',
+      fps: 30,
+    },
+    audio: {
+      codec: AudioCodec.AAC,
+      bitrate: '192k',
+      frequency: 44100,
+    },
+  } as Partial<ConversionConfig>,
 
   /**
-   * Twitter/X video
+   * Quality-focused presets
    */
-  twitter: {
-    name: 'Twitter/X',
-    description: 'Optimized for Twitter video',
-    config: {
+  quality: {
+    /** Ultra high quality */
+    high: {
       format: OutputFormat.MP4,
-      video: {
-        codec: VideoCodec.H264,
-        bitrate: '5M',
-        preset: 'medium',
-        profile: 'high',
-      },
-      audio: {
-        codec: AudioCodec.AAC,
-        bitrate: '128k',
-      },
-      timing: {
-        duration: 140, // Max 2:20
-      },
-    } as Partial<ConversionConfig>,
-  },
-
-  /**
-   * Web streaming (HLS)
-   */
-  webStreaming: {
-    name: 'Web Streaming',
-    description: 'Optimized for HLS web streaming',
-    config: {
-      format: OutputFormat.MP4,
-      video: {
-        codec: VideoCodec.H264,
-        bitrate: '3M',
-        preset: 'veryfast',
-        profile: 'main',
-        level: '4.0',
-        keyframeInterval: 48, // 2 seconds at 24fps
-      },
-      audio: {
-        codec: AudioCodec.AAC,
-        bitrate: '128k',
-        frequency: 44100,
-      },
-    } as Partial<ConversionConfig>,
-  },
-
-  /**
-   * High quality archival
-   */
-  archive: {
-    name: 'Archive Quality',
-    description: 'High quality H.265 with lossless audio',
-    config: {
-      format: OutputFormat.MKV,
       video: {
         codec: VideoCodec.H265,
-        quality: 18, // CRF 18 (high quality)
+        quality: 18,
         preset: 'slow',
-        profile: 'main10',
+        profile: 'main',
       },
       audio: {
-        codec: AudioCodec.FLAC,
+        codec: AudioCodec.AAC,
+        bitrate: '256k',
+      },
+    } as Partial<ConversionConfig>,
+
+    /** Medium quality */
+    medium: {
+      format: OutputFormat.MP4,
+      video: {
+        codec: VideoCodec.H264,
+        quality: 23,
+        preset: 'medium',
+      },
+      audio: {
+        codec: AudioCodec.AAC,
+        bitrate: '128k',
+      },
+    } as Partial<ConversionConfig>,
+
+    /** Lower quality for smaller files */
+    low: {
+      format: OutputFormat.MP4,
+      video: {
+        codec: VideoCodec.H264,
+        quality: 28,
+        preset: 'fast',
+      },
+      audio: {
+        codec: AudioCodec.AAC,
+        bitrate: '96k',
       },
     } as Partial<ConversionConfig>,
   },
 
   /**
-   * Maximum compression
+   * Size-optimized presets
    */
-  smallFile: {
-    name: 'Small File Size',
-    description: 'Maximum compression with acceptable quality',
-    config: {
+  size: {
+    /** Very small file size */
+    small: {
       format: OutputFormat.WEBM,
       video: {
         codec: VideoCodec.VP9,
-        quality: 35, // Lower quality for smaller size
+        quality: 35,
         preset: 'medium',
       },
       audio: {
@@ -213,194 +245,77 @@ export const Presets = {
         bitrate: '96k',
       },
     } as Partial<ConversionConfig>,
-  },
 
-  /**
-   * Audio extraction (no video)
-   */
-  audioOnly: {
-    name: 'Audio Only',
-    description: 'Extract audio to MP3',
-    config: {
-      format: OutputFormat.MP3,
+    /** Extremely small file size */
+    tiny: {
+      format: OutputFormat.WEBM,
       video: {
-        disabled: true,
+        codec: VideoCodec.VP9,
+        quality: 40,
+        size: '640x360',
+        fps: 24,
       },
       audio: {
-        codec: AudioCodec.MP3,
-        bitrate: '192k',
-        frequency: 44100,
+        codec: AudioCodec.OPUS,
+        bitrate: '64k',
       },
     } as Partial<ConversionConfig>,
   },
 
   /**
-   * Podcast audio
-   */
-  podcast: {
-    name: 'Podcast',
-    description: 'Optimized for podcast distribution',
-    config: {
-      format: OutputFormat.MP3,
-      video: {
-        disabled: true,
-      },
-      audio: {
-        codec: AudioCodec.MP3,
-        bitrate: '128k',
-        channels: 2,
-        frequency: 44100,
-        volumeNormalization: true,
-        filters: {
-          denoise: {
-            noise_reduction: 0.3,
-          },
-        },
-      },
-    } as Partial<ConversionConfig>,
-  },
-
-  /**
-   * GIF animation
-   */
-  gif: {
-    name: 'GIF Animation',
-    description: 'Convert video to GIF',
-    config: {
-      format: OutputFormat.GIF,
-      video: {
-        fps: 15,
-        size: '480x?', // Auto height
-        filters: {
-          scale: {
-            width: 480,
-            height: -1,
-            algorithm: ScalingAlgorithm.LANCZOS,
-          },
-        },
-      },
-      audio: {
-        disabled: true,
-      },
-      timing: {
-        duration: 10, // Short clips for GIF
-      },
-    } as Partial<ConversionConfig>,
-  },
-
-  /**
-   * 4K upscaling
-   */
-  upscale4K: {
-    name: '4K Upscale',
-    description: 'AI-enhanced upscaling to 4K',
-    config: {
-      format: OutputFormat.MP4,
-      video: {
-        codec: VideoCodec.H265,
-        bitrate: '20M',
-        preset: 'slow',
-        upscale: {
-          algorithm: ScalingAlgorithm.LANCZOS,
-          targetWidth: 3840,
-          targetHeight: 2160,
-          enhanceSharpness: true,
-          denoiseBeforeScale: true,
-          sharpnessAmount: 1.5,
-        },
-      },
-      audio: {
-        codec: AudioCodec.AAC,
-        bitrate: '256k',
-      },
-    } as Partial<ConversionConfig>,
-  },
-
-  /**
-   * Mobile device compatibility
-   */
-  mobile: {
-    name: 'Mobile Compatible',
-    description: 'Maximum compatibility for mobile devices',
-    config: {
-      format: OutputFormat.MP4,
-      video: {
-        codec: VideoCodec.H264,
-        bitrate: '2M',
-        preset: 'medium',
-        profile: 'baseline',
-        level: '3.1',
-        size: '1280x720',
-      },
-      audio: {
-        codec: AudioCodec.AAC,
-        bitrate: '128k',
-        frequency: 44100,
-      },
-    } as Partial<ConversionConfig>,
-  },
-
-  /**
-   * DVD quality
+   * DVD quality (legacy format)
    */
   dvd: {
-    name: 'DVD Quality',
-    description: 'Standard DVD quality (NTSC)',
-    config: {
-      format: OutputFormat.MPEG,
-      video: {
-        codec: VideoCodec.MPEG2,
-        bitrate: '6M',
-        size: '720x480',
-        fps: 29.97,
-      },
-      audio: {
-        codec: AudioCodec.AC3,
-        bitrate: '192k',
-        channels: 2,
-        frequency: 48000,
-      },
-    } as Partial<ConversionConfig>,
-  },
+    format: OutputFormat.MPEG,
+    video: {
+      codec: VideoCodec.MPEG2,
+      bitrate: '6M',
+      size: '720x480',
+      fps: 29.97,
+    },
+    audio: {
+      codec: AudioCodec.AC3,
+      bitrate: '192k',
+      channels: 2,
+      frequency: 48000,
+    },
+  } as Partial<ConversionConfig>,
 };
 
+// Export legacy Presets for backward compatibility
+export const Presets = presets;
+
 /**
- * Get preset by name
+ * Get preset by path
+ * @example getPreset('youtube', 'hd1080')
+ * @example getPreset('web', 'mobile')
  */
-export function getPreset(name: keyof typeof Presets) {
-  return Presets[name];
+export function getPreset(category: string, name: string): Partial<ConversionConfig> | undefined {
+  const cat = presets[category as keyof typeof presets];
+  if (!cat) return undefined;
+  
+  if (typeof cat === 'object' && 'format' in cat) {
+    return cat as Partial<ConversionConfig>;
+  }
+  
+  return cat[name as keyof typeof cat] as Partial<ConversionConfig>;
 }
 
 /**
  * List all available presets
  */
 export function listPresets() {
-  return Object.entries(Presets).map(([key, preset]) => ({
-    key,
-    name: preset.name,
-    description: preset.description,
-  }));
-}
-
-/**
- * Apply preset to base config
- */
-export function applyPreset(
-  baseConfig: Partial<ConversionConfig>,
-  presetName: keyof typeof Presets
-): ConversionConfig {
-  const preset = Presets[presetName];
-
-  return {
-    ...preset.config,
-    ...baseConfig,
-    video: {
-      ...preset.config.video,
-      ...baseConfig.video,
-    },
-    audio: {
-      ...preset.config.audio,
-      ...baseConfig.audio,
-    },
-  } as ConversionConfig;
+  const result: Array<{ category: string; name: string; config: Partial<ConversionConfig> }> = [];
+  
+  for (const [category, value] of Object.entries(presets)) {
+    if (typeof value === 'object' && 'format' in value) {
+      result.push({ category, name: category, config: value as Partial<ConversionConfig> });
+    } else {
+      for (const [name, config] of Object.entries(value)) {
+        result.push({ category, name, config: config as Partial<ConversionConfig> });
+      }
+    }
+  }
+  
+  return result;
 }
