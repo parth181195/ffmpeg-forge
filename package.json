@@ -37,7 +37,9 @@
     "fixtures:clean": "rm -rf tests/fixtures/*",
     "docs:dev": "vitepress dev docs",
     "docs:build": "vitepress build docs",
-    "docs:preview": "vitepress preview docs"
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "prepare": "husky"
   },
   "keywords": [
     "ffmpeg",
@@ -62,10 +64,23 @@
     "url": "https://github.com/parth181195/ffmpeg-forge/issues"
   },
   "homepage": "https://github.com/parth181195/ffmpeg-forge#readme",
+  "lint-staged": {
+    "*.{ts,tsx}": [
+      "npm run type-check",
+      "git add"
+    ],
+    "*.{js,ts,tsx,json,md}": [
+      "prettier --write",
+      "git add"
+    ]
+  },
   "devDependencies": {
     "@types/node": "^20.10.0",
     "@vitest/coverage-v8": "^1.6.1",
     "@vitest/ui": "^1.2.0",
+    "husky": "^9.1.7",
+    "lint-staged": "^16.2.4",
+    "prettier": "^3.6.2",
     "tsx": "^4.7.0",
     "typescript": "^5.3.3",
     "vite": "^5.0.8",
