@@ -1,0 +1,72 @@
+{
+  "name": "ffmpeg-forge",
+  "version": "0.1.0",
+  "description": "A modern, type-safe FFmpeg wrapper for Node.js with zero dependencies",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "dev": "vite build --watch",
+    "build": "tsc && vite build",
+    "preview": "vite preview",
+    "type-check": "tsc --noEmit",
+    "example": "tsx example/index.ts",
+    "example:conversion": "tsx example/test-conversion.ts",
+    "example:commands": "tsx example/test-command-generator.ts",
+    "example:real": "tsx example/test-real-conversion.ts",
+    "example:hardware": "tsx example/test-hardware-acceleration.ts",
+    "example:thumbnails": "tsx example/test-thumbnails-trailers.ts",
+    "example:all": "tsx example/test-all-features.ts",
+    "watch": "tsx watch example/index.ts",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:ui": "vitest --ui",
+    "test:coverage": "vitest run --coverage",
+    "fixtures:generate": "bash scripts/generate-test-files.sh",
+    "fixtures:download": "bash scripts/download-bigbuckbunny.sh",
+    "fixtures:clean": "rm -rf tests/fixtures/*"
+  },
+  "keywords": [
+    "ffmpeg",
+    "video",
+    "audio",
+    "media",
+    "converter",
+    "typescript",
+    "encoder",
+    "decoder",
+    "hardware-acceleration",
+    "gpu",
+    "ffmpeg-wrapper"
+  ],
+  "author": "Parth Jansari",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/parth181195/ffmpeg-forge"
+  },
+  "bugs": {
+    "url": "https://github.com/parth181195/ffmpeg-forge/issues"
+  },
+  "homepage": "https://github.com/parth181195/ffmpeg-forge#readme",
+  "devDependencies": {
+    "@types/node": "^20.10.0",
+    "@vitest/coverage-v8": "^1.6.1",
+    "@vitest/ui": "^1.2.0",
+    "tsx": "^4.7.0",
+    "typescript": "^5.3.3",
+    "vite": "^5.0.8",
+    "vite-plugin-dts": "^3.7.0",
+    "vitest": "^1.2.0"
+  }
+}

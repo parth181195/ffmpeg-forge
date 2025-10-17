@@ -1,0 +1,45 @@
+# Source files
+src/
+tests/
+example/
+scripts/
+
+# Config files
+tsconfig.json
+vite.config.ts
+vitest.config.ts
+.eslintrc.json
+
+# Documentation (keep only README)
+docs/
+CHANGELOG.md
+
+# Development files
+*.log
+*.lock
+.DS_Store
+.env
+.env.*
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Git
+.git/
+.gitignore
+.gitattributes
+
+# CI/CD
+.github/
+
+# Test output
+coverage/
+tests/output/
+tests/fixtures/
+
+# Node modules (never publish)
+node_modules/
+
