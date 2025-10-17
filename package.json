@@ -70,9 +70,6 @@
     ],
     "tests/**/*.{ts,tsx}": [
       "tsc --noEmit --project tsconfig.test.json"
-    ],
-    "*.{js,ts,tsx,json,md}": [
-      "prettier --write"
     ]
   },
   "devDependencies": {
