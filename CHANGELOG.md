@@ -82,4 +82,10 @@ All notable changes to this project will be documented in this file.
 - 90 tests passing
 - 2,327 lines of documentation
 
+### Tested On
+- FFmpeg 7.1.1 (Ubuntu)
+- Node.js 18+
+- Hardware: AMD Ryzen 5 5600X, NVIDIA RTX 4070
+- NVIDIA NVENC hardware acceleration verified working
+
 [0.1.0]: https://github.com/parth181195/ffmpeg-forge/releases/tag/v0.1.0

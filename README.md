@@ -28,7 +28,12 @@ npm install ffmpeg-forge
 
 **Requirements:**
 - Node.js 16+
-- FFmpeg installed on your system ([installation guide](https://ffmpeg.org/download.html))
+- FFmpeg 4.0+ installed on your system ([installation guide](https://ffmpeg.org/download.html))
+
+**Tested On:**
+- FFmpeg: 7.1.1
+- Node.js: 18+
+- Platforms: Linux, macOS (should work on Windows)
 
 ## 🚀 Quick Start
 
@@ -448,6 +453,22 @@ Contributions are welcome! Please read our contributing guidelines and submit pu
 ## 📄 License
 
 MIT © [Parth Jansari](https://github.com/parth181195)
+
+## 🧪 Tested Environment
+
+This package has been tested on the following configuration:
+
+**Software:**
+- FFmpeg: 7.1.1
+- Node.js: 18+
+- Operating System: Ubuntu 25.04 (Linux kernel 6.14)
+
+**Hardware:**
+- CPU: AMD Ryzen 5 5600X (6-Core, 12 threads)
+- GPU: NVIDIA GeForce RTX 4070 (12GB VRAM, Driver 580.65)
+- RAM: 60GB
+
+**Note:** The package should work on any system with FFmpeg 4.0+ and Node.js 16+. Hardware acceleration features depend on your specific GPU and drivers.
 
 ## 🙏 Acknowledgments
 
