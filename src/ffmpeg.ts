@@ -9,7 +9,7 @@ import { HardwareAcceleration, type HardwareAccelerationValue, type HardwareAcce
 import { StreamType, type StreamTypeValue } from './types/stream';
 import type { InputSource } from './types/input';
 import type { ConversionSuggestion, ConversionCompatibility, ConversionRecommendation } from './types/conversion';
-import type { ConversionConfig, ConversionCallbacks, BatchConversionCallbacks, ConversionResult, ConversionEvents, ProgressInfo } from './types/conversion-config';
+import type { ConversionConfig, ConversionCallbacks, BatchConversionCallbacks, ConversionResult, ConversionEvents, ProgressInfo, ConversionResultBuffer } from './types/conversion-config';
 import { filterCodecsByAcceleration, detectHardwareType } from './utils/hardware-detection';
 import { prepareInput, cleanupInput, getInputPath } from './utils/input-handler';
 import { generateConversionSuggestions, checkConversionCompatibility, getConversionRecommendation, CODEC_CONTAINER_COMPATIBILITY } from './utils/conversion-helper';
@@ -675,7 +675,7 @@ export class FFmpeg extends EventEmitter {
     
     // Create event emitter for this specific conversion
     const events: ConversionEvents = {
-      start: (command: string) => {
+      start: (_command: string) => {
         // Events are handled by the conversion result, not the main instance
       },
       progress: (progress: ProgressInfo) => {
@@ -685,7 +685,7 @@ export class FFmpeg extends EventEmitter {
       end: () => {
         // Events are handled by the conversion result, not the main instance
       },
-      error: (error: Error) => {
+      error: (_error: Error) => {
         // Events are handled by the conversion result, not the main instance
       }
     };
@@ -708,7 +708,7 @@ export class FFmpeg extends EventEmitter {
       events,
       cancel: () => {
         isCancelled = true;
-        engine.kill();
+        engine.cancel();
       },
       getProgress: () => currentProgress
     };
@@ -735,14 +735,14 @@ export class FFmpeg extends EventEmitter {
   /**
    * Convert and return output as Buffer with event-based progress tracking
    */
-  convertToBuffer(config: Omit<ConversionConfig, 'output'>): ConversionResult & { promise: Promise<Buffer> } {
+  convertToBuffer(config: Omit<ConversionConfig, 'output'>): ConversionResultBuffer {
     const engine = new ExecutionEngine(FFmpeg.ffmpegPath);
     let currentProgress: ProgressInfo | null = null;
     let isCancelled = false;
     
     // Create event emitter for this specific conversion
     const events: ConversionEvents = {
-      start: (command: string) => {
+      start: (_command: string) => {
         // Events are handled by the conversion result, not the main instance
       },
       progress: (progress: ProgressInfo) => {
@@ -752,7 +752,7 @@ export class FFmpeg extends EventEmitter {
       end: () => {
         // Events are handled by the conversion result, not the main instance
       },
-      error: (error: Error) => {
+      error: (_error: Error) => {
         // Events are handled by the conversion result, not the main instance
       }
     };
@@ -775,7 +775,7 @@ export class FFmpeg extends EventEmitter {
       events,
       cancel: () => {
         isCancelled = true;
-        engine.kill();
+        engine.cancel();
       },
       getProgress: () => currentProgress
     };

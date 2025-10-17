@@ -27,6 +27,7 @@ export type {
   ConversionCallbacks,
   ConversionEvents,
   ConversionResult,
+  ConversionResultBuffer,
   ProgressInfo,
   VideoConfig,
   AudioConfig,

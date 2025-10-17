@@ -214,6 +214,16 @@ export interface ConversionResult {
 }
 
 /**
+ * Conversion result with event handling for buffer output
+ */
+export interface ConversionResultBuffer extends Omit<ConversionResult, 'promise'> {
+  /**
+   * Promise that resolves with the output buffer
+   */
+  promise: Promise<Buffer>;
+}
+
+/**
  * Preset configurations
  */
 export interface PresetConfig {
