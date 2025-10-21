@@ -102,7 +102,6 @@ export class FFmpeg extends EventEmitter {
    */
   private autoDetectFFmpegPath(): void {
     try {
-      // Try to find ffmpeg using 'which' command (Unix-like) or 'where' (Windows)
       const command = process.platform === 'win32' ? 'where ffmpeg' : 'which ffmpeg';
       const path = execSync(command, { encoding: 'utf-8' }).trim().split('\n')[0];
 
@@ -110,8 +109,7 @@ export class FFmpeg extends EventEmitter {
         FFmpeg.setFFmpegPath(path);
       }
     } catch {
-      // If auto-detection fails, keep default 'ffmpeg' (system PATH)
-      // We'll validate when actually using it
+      // Falls back to system PATH
     }
   }
 
@@ -120,7 +118,6 @@ export class FFmpeg extends EventEmitter {
    */
   private autoDetectFFprobePath(): void {
     try {
-      // Try to find ffprobe using 'which' command (Unix-like) or 'where' (Windows)
       const command = process.platform === 'win32' ? 'where ffprobe' : 'which ffprobe';
       const path = execSync(command, { encoding: 'utf-8' }).trim().split('\n')[0];
 
@@ -128,8 +125,7 @@ export class FFmpeg extends EventEmitter {
         FFmpeg.setFFprobePath(path);
       }
     } catch {
-      // If auto-detection fails, keep default 'ffprobe' (system PATH)
-      // We'll validate when actually using it
+      // Falls back to system PATH
     }
   }
 

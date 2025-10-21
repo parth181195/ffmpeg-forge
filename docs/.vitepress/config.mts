@@ -48,6 +48,23 @@ export default defineConfig({
           text: 'API Reference',
           items: [
             { text: 'Overview', link: '/api/' },
+            { text: 'FFmpeg Class', link: '/api/ffmpeg-class' },
+          ],
+        },
+        {
+          text: 'Configuration',
+          items: [
+            { text: 'Conversion Config', link: '/api/conversion-config' },
+            { text: 'Video Config', link: '/api/video-config' },
+            { text: 'Audio Config', link: '/api/audio-config' },
+          ],
+        },
+        {
+          text: 'Reference',
+          items: [
+            { text: 'Filters', link: '/api/filters' },
+            { text: 'Enums', link: '/api/enums' },
+            { text: 'Types', link: '/api/types' },
           ],
         },
       ],

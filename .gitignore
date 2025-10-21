@@ -43,3 +43,11 @@ Thumbs.db
 *.tmp
 *.temp
 .cache/
+
+# Internal documentation (not for repo)
+CAPABILITIES.md
+QUICK_REFERENCE.md
+ROADMAP.md
+SCOPE_ANALYSIS.md
+TEST_FIXTURES_GUIDE.md
+blog/
