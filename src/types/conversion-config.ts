@@ -182,6 +182,7 @@ export interface ProgressInfo {
   targetSize: number; // Target file size (KB)
   timemark: string; // Current time position
   percent: number; // Progress percentage (0-100)
+  speed: number; // Encoding speed multiplier (e.g., 2.5x)
 }
 
 /**

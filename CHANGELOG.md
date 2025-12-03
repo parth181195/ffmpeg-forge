@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.3.9] - 2025-12-03
+
+### Added
+
+- Added `getDetailedVideoMetadata()` method to extract rotation metadata from video files
+- Added `rotation` field to `VideoMetadata` interface
+- Added `sideDataList` field to `StreamMetadata` interface for Display Matrix data
+- Added `SideDataItem` interface for rotation and display matrix metadata
+- Enhanced `buildProbeCommand()` with `includeAllData` parameter to include side_data
+
+### Fixed
+
+- Fixed rotation detection for MOV files from iOS devices (reads from Display Matrix)
+- Fixed missing rotation metadata from stream tags and side_data
+
 ## [0.3.8] - 2025-10-21\n\n### Changed\n\n- Auto-bump patch version on push to main\n
 
 ## [0.3.7] - 2025-10-21\n\n### Changed\n\n- Auto-bump patch version on push to main\n

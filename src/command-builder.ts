@@ -223,10 +223,20 @@ export class CommandBuilder {
   /**
    * Build FFprobe command for metadata extraction
    */
-  buildProbeCommand(inputPath: string): string[] {
+  buildProbeCommand(inputPath: string, includeAllData: boolean = false): string[] {
     this.reset();
 
-    return ['-v', 'quiet', '-print_format', 'json', '-show_format', '-show_streams', inputPath];
+    const baseArgs = ['-v', 'quiet', '-print_format', 'json', '-show_format', '-show_streams'];
+    
+    // Include side_data and other detailed entries if requested
+    if (includeAllData) {
+      baseArgs.push('-show_entries', 'stream=index,codec_name,codec_long_name,codec_type,codec_tag_string,width,height,coded_width,coded_height,display_aspect_ratio,pix_fmt,r_frame_rate,avg_frame_rate,bit_rate,sample_rate,channels,channel_layout,bits_per_sample,duration,duration_ts,start_time,start_pts,tags,side_data_list');
+      baseArgs.push('-show_entries', 'format');
+    }
+    
+    baseArgs.push(inputPath);
+    
+    return baseArgs;
   }
 
   /**

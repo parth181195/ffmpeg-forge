@@ -585,6 +585,45 @@ export class FFmpeg extends EventEmitter {
   }
 
   /**
+   * Get detailed video metadata including rotation and side_data
+   * This method includes all available metadata fields from ffprobe
+   * @param input - File path, Buffer, or ReadStream
+   */
+  async getDetailedVideoMetadata(input: InputSource): Promise<VideoMetadata> {
+    let inputInfo;
+
+    try {
+      FFmpeg.validateFFprobePath();
+
+      // Prepare input (convert buffer/stream to temp file if needed)
+      inputInfo = await prepareInput(input);
+      const inputPath = getInputPath(inputInfo);
+
+      const args = this.commandBuilder.buildProbeCommand(inputPath, true); // true = include all data
+      const output = execSync(`${FFmpeg.getFFprobePath()} ${args.join(' ')}`, {
+        encoding: 'utf-8',
+        stdio: ['pipe', 'pipe', 'pipe'],
+      });
+
+      const metadata = parseMediaMetadata(output);
+      return parseVideoMetadata(metadata);
+    } catch (error) {
+      if (error instanceof FFprobeNotFoundError) {
+        throw error;
+      } else {
+        throw new FFmpegExecutionError(
+          `Failed to get detailed metadata: ${error instanceof Error ? error.message : 'Unknown error'}`,
+          `${FFmpeg.getFFprobePath()} probe`
+        );
+      }
+    } finally {
+      if (inputInfo) {
+        cleanupInput(inputInfo);
+      }
+    }
+  }
+
+  /**
    * Get structured image metadata
    * @param input - File path, Buffer, or ReadStream
    */

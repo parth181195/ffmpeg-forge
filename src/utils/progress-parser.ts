@@ -64,6 +64,14 @@ export class ProgressParser {
       }
     }
 
+    // Parse speed
+    const speedMatch = line.match(/speed=\s*([\d.]+)x/);
+    if (speedMatch) {
+      progress.speed = parseFloat(speedMatch[1]);
+    } else {
+      progress.speed = 0;
+    }
+
     // Return null if we couldn't parse essential fields
     if (!progress.frames && !progress.timemark) {
       return null;

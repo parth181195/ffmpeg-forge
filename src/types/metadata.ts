@@ -1,3 +1,10 @@
+export interface SideDataItem {
+  side_data_type?: string;
+  sideDataType?: string;
+  displaymatrix?: string;
+  rotation?: number;
+}
+
 export interface StreamMetadata {
   index: number;
   codecName: string;
@@ -29,6 +36,9 @@ export interface StreamMetadata {
   startPts?: number;
   bitrate?: string;
   tags?: Record<string, string>;
+  
+  // Side data (rotation, etc.)
+  sideDataList?: SideDataItem[];
 }
 
 export interface FormatMetadata {
@@ -61,6 +71,7 @@ export interface VideoMetadata {
   audioCodec?: string;
   bitrate: number; // in kbps
   size: number; // in bytes
+  rotation?: number; // rotation in degrees (from side_data or tags)
 }
 
 export interface ImageMetadata {

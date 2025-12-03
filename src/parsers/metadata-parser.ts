@@ -54,6 +54,9 @@ export function parseMediaMetadata(jsonOutput: string): MediaMetadata {
     startPts: stream.start_pts,
     bitrate: stream.bit_rate,
     tags: stream.tags || {},
+    
+    // Side data (rotation, etc.)
+    sideDataList: stream.side_data_list || stream.sideDataList || undefined,
   }));
 
   return { format, streams };
@@ -90,6 +93,24 @@ export function parseVideoMetadata(metadata: MediaMetadata): VideoMetadata {
   // Parse size
   const size = parseInt(metadata.format.size || '0', 10);
 
+  // Extract rotation from tags or side_data
+  let rotation: number | undefined = undefined;
+  
+  // First check stream tags (older formats)
+  if (primaryVideo.tags?.rotate) {
+    rotation = parseInt(primaryVideo.tags.rotate, 10) || undefined;
+  }
+  
+  // Then check side_data (MOV files from iOS devices)
+  if (rotation === undefined && primaryVideo.sideDataList && primaryVideo.sideDataList.length > 0) {
+    const displayMatrix = primaryVideo.sideDataList.find(
+      (data: any) => data.side_data_type === 'Display Matrix' || data.sideDataType === 'Display Matrix'
+    );
+    if (displayMatrix && displayMatrix.rotation !== undefined) {
+      rotation = Math.round(displayMatrix.rotation);
+    }
+  }
+
   return {
     format: metadata.format,
     videoStreams,
@@ -103,6 +124,7 @@ export function parseVideoMetadata(metadata: MediaMetadata): VideoMetadata {
     audioCodec: primaryAudio?.codecName,
     bitrate,
     size,
+    rotation,
   };
 }
 
