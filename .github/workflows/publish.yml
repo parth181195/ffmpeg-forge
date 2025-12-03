@@ -71,16 +71,12 @@ jobs:
           fi
 
       # Publish with provenance for supply chain security
-      # --provenance: Creates signed attestations linking package to source (uses OIDC)
-      # For OIDC Trusted Publishing setup, see: NPM_TOKEN_SETUP.md
-      - name: Publish to npm
+      # Uses OIDC Trusted Publishing (no token needed!)
+      # Provenance creates signed attestations linking package to source
+      # For setup details, see: NPM_TOKEN_SETUP.md
+      - name: Publish to npm with OIDC
         if: steps.version-bump.outputs.version_changed == 'true'
         run: npm publish --provenance --access public
-        env:
-          # For OIDC Trusted Publishing, NPM_TOKEN is optional
-          # If not set, npm will use OIDC authentication (preferred method)
-          # For granular token setup, see: NPM_TOKEN_SETUP.md
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       - name: Create Git tag
         if: steps.version-bump.outputs.version_changed == 'true'
