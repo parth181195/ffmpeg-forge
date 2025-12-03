@@ -25,9 +25,8 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '20'
+          registry-url: 'https://registry.npmjs.org'
           cache: 'npm'
-          # Don't set registry-url when using OIDC Trusted Publishing
-          # This prevents setup-node from creating .npmrc with token auth
 
       - name: Install dependencies
         run: npm ci --ignore-scripts
@@ -71,13 +70,27 @@ jobs:
             echo "New version v$CURRENT_VERSION detected"
           fi
 
-      # Publish with provenance for supply chain security
-      # Uses OIDC Trusted Publishing (no token needed!)
+      # Configure npm for OIDC Trusted Publishing
+      - name: Configure npm for OIDC
+        if: steps.version-bump.outputs.version_changed == 'true'
+        run: |
+          # Remove any existing auth config
+          npm config delete //registry.npmjs.org/:_authToken 2>/dev/null || true
+          
+          # Configure registry
+          npm config set registry https://registry.npmjs.org/
+          
+          echo "npm configured for OIDC Trusted Publishing"
+
+      # Publish with provenance using OIDC Trusted Publishing
       # Provenance creates signed attestations linking package to source
       # For setup details, see: NPM_TOKEN_SETUP.md
       - name: Publish to npm with OIDC
         if: steps.version-bump.outputs.version_changed == 'true'
         run: npm publish --provenance --access public
+        env:
+          # Explicitly unset NODE_AUTH_TOKEN to force OIDC usage
+          NODE_AUTH_TOKEN: ''
 
       - name: Create Git tag
         if: steps.version-bump.outputs.version_changed == 'true'
