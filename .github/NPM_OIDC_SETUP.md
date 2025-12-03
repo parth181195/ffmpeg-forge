@@ -42,12 +42,29 @@ The `--provenance` flag:
    npm audit signatures
    ```
 
-## NPM Token Still Required (For Now)
+## Authentication Methods
 
-The workflow still uses `NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}` because:
-- It's needed for the initial authentication with npm registry
-- Works alongside OIDC for provenance
-- Provides backward compatibility
+### Recommended: OIDC Trusted Publishing (No Token Required!)
+
+As of November 2025, npm supports **Trusted Publishing** with OIDC:
+- ✅ No long-lived secrets needed
+- ✅ Automatic provenance generation
+- ✅ Direct authentication via GitHub Actions
+- ✅ Most secure option
+
+**Setup**: Configure trusted publisher at https://www.npmjs.com/package/ffmpeg-forge/access
+
+Once configured, the workflow can publish without `NPM_TOKEN` secret!
+
+### Alternative: Granular Access Token
+
+If OIDC Trusted Publishing isn't set up, a granular access token can be used:
+- ⚠️ Classic tokens are deprecated (sunset Dec 9, 2025)
+- ✅ Granular tokens have fine-grained permissions
+- ⚠️ Maximum 90-day expiration
+- ✅ Can bypass 2FA for automation
+
+**Setup**: See `NPM_TOKEN_SETUP.md` for detailed instructions
 
 ## Benefits
 
@@ -73,12 +90,35 @@ npm install ffmpeg-forge
 npm audit signatures
 ```
 
-## Migration Path (Future)
+## Migration to OIDC Trusted Publishing
 
-To fully adopt OIDC without NPM_TOKEN:
-1. Configure npm registry to trust GitHub Actions OIDC
-2. Remove `NODE_AUTH_TOKEN` secret
-3. Update workflow to rely solely on `--provenance` flag
+### Current State (Dec 2025)
+npm now fully supports OIDC Trusted Publishing!
+
+### Migration Steps:
+
+1. **Configure Trusted Publisher on npm**:
+   - Go to https://www.npmjs.com/package/ffmpeg-forge/access
+   - Add GitHub Actions as trusted publisher
+   - Specify repository: `parth181195/ffmpeg-forge`
+   - Specify workflow: `publish.yml` (or `main.yml`)
+
+2. **Test Without Token** (Optional):
+   - Temporarily remove `NPM_TOKEN` secret from GitHub
+   - Trigger workflow
+   - npm will authenticate via OIDC
+
+3. **Keep Token as Fallback** (Recommended):
+   - Keep `NPM_TOKEN` secret configured
+   - Workflow will try OIDC first, fall back to token
+   - Provides redundancy
+
+### Benefits of OIDC Trusted Publishing:
+- 🔒 No long-lived secrets to rotate
+- 🔐 Stronger security guarantees
+- ⚡ Automatic provenance (no extra flags needed)
+- 🎯 Per-package configuration
+- ✅ Works with WebAuthn 2FA
 
 ## References
 

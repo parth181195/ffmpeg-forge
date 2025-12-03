@@ -40,6 +40,9 @@ jobs:
       - name: Publish to npm with provenance
         run: npm publish --provenance --access public
         env:
+          # For OIDC Trusted Publishing, NPM_TOKEN is optional
+          # If NPM_TOKEN is not set, npm will use OIDC authentication
+          # See NPM_TOKEN_SETUP.md for configuration options
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       - name: Get version
