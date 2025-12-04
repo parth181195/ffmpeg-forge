@@ -2,6 +2,8 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.3.11] - 2025-12-04\n\n### Changed\n\n- Auto-bump patch version on push to main\n
+
 ## [0.3.10] - 2025-12-04\n\n### Changed\n\n- Auto-bump patch version on push to main\n
 
 ## [0.3.9] - 2025-12-03
