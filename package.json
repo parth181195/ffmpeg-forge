@@ -1,6 +1,6 @@
 {
   "name": "ffmpeg-forge",
-  "version": "0.3.9",
+  "version": "0.3.10",
   "description": "A modern, type-safe FFmpeg wrapper for Node.js with zero dependencies",
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
