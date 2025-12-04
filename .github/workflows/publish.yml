@@ -70,17 +70,6 @@ jobs:
             echo "New version v$CURRENT_VERSION detected"
           fi
 
-      # Publish with provenance using Granular Access Token
-      # The NPM_TOKEN should be a Granular Access Token with:
-      # - Package: ffmpeg-forge with Read/Write permissions
-      # - Bypass 2FA enabled for automation
-      # Generate at: https://www.npmjs.com/settings/parth181195/tokens
-      - name: Publish to npm
-        if: steps.version-bump.outputs.version_changed == 'true'
-        run: npm publish --provenance --access public
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-
       - name: Create Git tag
         if: steps.version-bump.outputs.version_changed == 'true'
         run: |
